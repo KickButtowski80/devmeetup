@@ -2,7 +2,9 @@
     <v-sheet
       height="100%"
     >
-    <v-app-bar>
+    <v-app-bar
+       dark
+       class='primary darken-1'>
       <v-app-bar-nav-icon  
         @click.stop="drawer = !drawer"
         class="hidden-sm-and-up"></v-app-bar-nav-icon>
