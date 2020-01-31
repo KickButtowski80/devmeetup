@@ -3,13 +3,18 @@
       height="100%"
     >
     <v-app-bar>
-      <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon  
+        @click.stop="drawer = !drawer"
+        class="hidden-sm-and-up"></v-app-bar-nav-icon>
       <v-toolbar-title>DevMeetup</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text >
-        <v-icon left>supervisor_account</v-icon>
-        View Meetups
-      </v-btn>  
+      <div class='hidden-xs-only'>
+        <v-btn text >
+            <v-icon left>supervisor_account</v-icon>
+            View Meetups
+         </v-btn>  
+      </div>
+
     </v-app-bar>    
     <v-navigation-drawer v-model="drawer">         
     <v-list>
