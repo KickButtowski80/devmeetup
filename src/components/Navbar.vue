@@ -1,24 +1,25 @@
 <template>
-    <v-sheet
-      height="100%"
-    >
+  <div> 
     <v-app-bar
        dark
        class='primary darken-1'>
       <v-app-bar-nav-icon  
         @click.stop="drawer = !drawer"
-        class="hidden-sm-and-up"></v-app-bar-nav-icon>
+        class="hidden-md-and-up"></v-app-bar-nav-icon>
       <v-toolbar-title>DevMeetup</v-toolbar-title>
       <v-spacer></v-spacer>
-      <div class='hidden-xs-only'>
-        <v-btn text >
-            <v-icon left>supervisor_account</v-icon>
-            View Meetups
+      <div class='hidden-sm-only'>
+        <v-btn text 
+          v-for="item in items"
+          :key="item.title">
+            <v-icon left>{{item.icon}}</v-icon>
+            {{item.title}}
          </v-btn>  
       </div>
 
     </v-app-bar>    
-    <v-navigation-drawer v-model="drawer">         
+  <v-sheet>
+    <v-navigation-drawer v-model="drawer" app>         
     <v-list>
     <v-list-item
         v-for="item in items"
@@ -34,8 +35,16 @@
         </v-list-item-content>
     </v-list-item>
     </v-list>    
-    </v-navigation-drawer>     
+    </v-navigation-drawer>   
+  
   </v-sheet>
+  
+   
+  
+  
+  
+  </div>
+ 
 </template>
 <script>
 export default {
@@ -44,7 +53,11 @@ export default {
         drawer: null,
         items: [
           { title: 'View Meetups', icon: 'supervisor_account' },
-          { title: 'About', icon: 'question_answer' },
+          { title: 'Organize Meetup', icon: 'room' },
+          { title: 'Profile', icon: 'person' },
+          { title: 'Sign up', icon: 'face' },
+          { title: 'Sign in', icon: 'lock_open' },
+          
         ],
       }
     },
