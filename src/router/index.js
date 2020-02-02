@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+import CreateMeetup from "../views/Meetup/CreateMeetup"
+import Meetups from "../views/Meetup/Meetups"
+import Profile from '../views/User/Profile'
+import Signin from '../views/User/Signin'
+import Signup from '../views/User/Signup'
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,6 +21,31 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path:'/meetup/createmeetup',
+    name:"CreateMeetup",
+    component: CreateMeetup
+  },
+  {
+    path:'/meetups',
+    name:"meetups",
+    component: Meetups
+  },
+  {
+    path: '/profile',
+    name: "profile",
+    component: Profile
+  },
+  {
+    path: '/signin',
+    name: "singin",
+    component: Signin
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup
   }
 ]
 
