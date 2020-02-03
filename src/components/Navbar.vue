@@ -54,7 +54,7 @@ export default {
         drawer: null,
         items: [
           { title: 'View Meetups', icon: 'supervisor_account', link: '/meetups' },
-          { title: 'Organize Meetup', icon: 'room', link: '/meetup/createmeetup' },
+          { title: 'Organize Meetup', icon: 'room', link: '/meetup/create' },
           { title: 'Profile', icon: 'person', link: '/profile' },
           { title: 'Sign up', icon: 'face', link: '/signin' },
           { title: 'Sign in', icon: 'lock_open', link: '/signup' },

@@ -23,7 +23,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path:'/meetup/createmeetup',
+    path:'/meetup/create',
     name:"CreateMeetup",
     component: CreateMeetup
   },
