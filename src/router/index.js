@@ -30,6 +30,7 @@ const routes = [
   },
   {
     path: '/meetups/:id',
+    props: true,
     name: "Meetup",
     component: Meetup
   },

@@ -1,9 +1,14 @@
 <template>
     <div>
-        <v-container>
-            <v-row justify="center" align="center" > 
+        <v-container justify="center" align="center" >
+        <v-row>
+          <v-col>
+            <v-btn v-on:click="this.meetup = sortByDate">Sort By Date</v-btn>
+          </v-col>
+        </v-row>
+            <v-row > 
                 <v-col
-                v-for="(meetup, i) in meetups"
+                v-for="(meetup, i) in sortByDate()"
                 :key="i"
                 cols="12"  
             
@@ -27,9 +32,9 @@
                             class="headline"
                             v-text="meetup.title"
                             ></v-card-title>
-                            <v-card-subtitle v-text="meetup.title"></v-card-subtitle>
+                            <v-card-subtitle v-text="meetup.date"></v-card-subtitle>
                     <v-card-actions> 
-                        <v-btn outlined to="/meetups/1" >
+                        <v-btn outlined v-bind:to="'/meetups/' + meetup.id" >
                             <v-icon left >arrow_forward</v-icon>
                             View Meetup
                         </v-btn>
@@ -52,9 +57,19 @@ import {mapState} from 'vuex'
     }),
 
     computed:{
+    
        ...mapState({
-        meetups: state => state.meetups
-      })
+        meetups: state => state.loadedMeetups
+      }),
+
+    
+    },
+    methods:{
+       sortByDate(){     
+         console.log(this.$store.getters.loadedMeetups)   
+          return this.$store.getters.loadedMeetups
+         
+      },
     }
   }
 </script>
