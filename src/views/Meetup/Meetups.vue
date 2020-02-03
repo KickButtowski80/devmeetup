@@ -3,32 +3,32 @@
         <v-container>
             <v-row justify="center" align="center" > 
                 <v-col
-                v-for="(item, i) in items"
+                v-for="(meetup, i) in meetups"
                 :key="i"
                 cols="12"  
             
                 >
                     <v-card
-                        :color="item.color"
+                        :color="meetup.color"
                         dark
                         max-width="600"
                         class="mx-auto"
                     >
-                    <div class="d-flex flex-no-wrap justify-space-between">
+                    <div class="d-flex flex-no-wrap justify-space-between mx-5">
                         <v-avatar
                             class="ma-3"                            
                             size= "123"
                             tile
                         >
-                        <v-img :src="item.src"></v-img>
+                        <v-img :src="meetup.src"></v-img>
                         </v-avatar>
-                        <div>
+                    <div style="width:250px">
                             <v-card-title
                             class="headline"
-                            v-text="item.title"
+                            v-text="meetup.title"
                             ></v-card-title>
-                            <v-card-subtitle v-text="item.artist"></v-card-subtitle>
-                            <v-card-actions> 
+                            <v-card-subtitle v-text="meetup.title"></v-card-subtitle>
+                    <v-card-actions> 
                         <v-btn outlined to="/meetups/1" >
                             <v-icon left >arrow_forward</v-icon>
                             View Meetup
@@ -44,22 +44,17 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex'
   export default {
     data: () => ({
-      items: [
-        {
-          color: 'primary',
-          src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-          title: 'My Meetup',
-          artist: 'TBA',
-        },
-        {
-          color: '#952175',
-          src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-          title: 'Halcyon Days',
-          artist: 'Ellie Goulding',
-        },
-      ],
+     
+     
     }),
+
+    computed:{
+       ...mapState({
+        meetups: state => state.meetups
+      })
+    }
   }
 </script>
