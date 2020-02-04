@@ -35,8 +35,7 @@ export default new Vuex.Store({
      getters:{
        loadedMeetups(state){
          return state.loadedMeetups.sort((meetupA, meetupB) => {
-           console.log("a " + meetupA.date + "b " + meetupB.date)
-           return meetupA.date > meetupB.date
+            return meetupA.date > meetupB.date
          })
        },
        featuredMeetups(state, getters){
@@ -52,9 +51,23 @@ export default new Vuex.Store({
 
      },
     mutations: {
+      createMeetup (state, newMeetup){
+        state.loadedMeetups.push(newMeetup)
+      }
     },
     actions: {
+      createMeetup(context, payload){
+        const newMeetup ={
+          src:  payload.src,
+          id: "4", 
+          title: payload.title ,
+          color: "#" + Math.random().toString(16).slice(2, 8),
+          date: "2021-01-22"
+        }
+        context.commit('createMeetup', newMeetup)
+      }
     },
     modules: {
+     
     }
 })
