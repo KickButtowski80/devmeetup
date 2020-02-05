@@ -4,8 +4,27 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
 Vue.config.productionTip = false
 
+
+const firebaseConfig = {
+  apiKey: process.env.apiKey ,
+  authDomain: process.env.authDomain,
+  databaseURL: process.env.databaseURL,
+  projectId: "devmeetup-it",
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId
+};
+
+
+firebase.initializeApp(firebaseConfig);
+
+
+require('dotenv').config()
 new Vue({
   router,
   store,
