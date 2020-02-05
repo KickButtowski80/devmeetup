@@ -10,19 +10,22 @@ export default new Vuex.Store({
        id: "1", 
        title: "Meetup New York",
        color: '#952175',
-       date: "2021-01-22"
+       date: "2021-01-22",
+       location: "New York"
     },
       {src: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQU5PtF945hQNCefU7NXSFPp6AK8IcGlQioYLVYwMnjDe6mjFNa",
        id: "2" ,
        title:"Los Angeles Meetup",
        color: 'primary',
-       date: "2020-09-25"
+       date: "2020-09-25",
+       location: "Los Angeles"
     },
       {src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/London_Thames_Sunset_panorama_-_Feb_2008.jpg/800px-London_Thames_Sunset_panorama_-_Feb_2008.jpg",
        id: "3" ,
        title:"London Meetup", 
        color: 'info',
-       date: "2020-01-16"
+       date: "2020-01-16",
+       location: "London"
         // (YYYY-MM-DD) 
     }
     ],
@@ -62,8 +65,9 @@ export default new Vuex.Store({
           id: "4", 
           title: payload.title ,
           color: "#" + Math.random().toString(16).slice(2, 8),
-          date: "2021-01-22"
-        }
+          date: payload.date,
+          location: payload.location
+                }
         context.commit('createMeetup', newMeetup)
       }
     },

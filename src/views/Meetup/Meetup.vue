@@ -10,12 +10,14 @@
                     <v-img
                     class="white--text align-end"
                     height="400px"
-                    :src= meetup.src
-                    >
+                    :src= "meetup.src">
+
                     <v-card-title>{{meetup.title}}</v-card-title>
                     </v-img>
 
-                    <v-card-subtitle class="pb-0">{{meetup.date}}</v-card-subtitle>
+                    <v-card-subtitle class="pb-0">{{meetup.date}} which take place at
+                    {{meetup.location}}
+                    </v-card-subtitle>
 
                     <v-card-text class="text--primary">
                     <!-- <h3 class="info--text">{{currentMeetup.title}}</h3> -->

@@ -8,7 +8,7 @@
         </v-row>
             <v-row > 
                 <v-col
-                v-for="(meetup, i) in sortByDate()"
+                v-for="(meetup, i) in meetups"
                 :key="i"
                 cols="12"  
             
@@ -32,7 +32,12 @@
                             class="headline"
                             v-text="meetup.title"
                             ></v-card-title>
-                            <v-card-subtitle v-text="meetup.date"></v-card-subtitle>
+                            <v-card-subtitle >
+                              location: {{meetup.location}}
+                              <br/>
+                              date: {{meetup.date}}
+                            </v-card-subtitle>
+
                     <v-card-actions> 
                         <v-btn outlined v-bind:to="'/meetups/' + meetup.id" >
                             <v-icon left >arrow_forward</v-icon>
@@ -51,11 +56,6 @@
 <script>
 import {mapState} from 'vuex'
   export default {
-    data: () => ({
-     
-     
-    }),
-
     computed:{
     
        ...mapState({

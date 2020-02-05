@@ -57,6 +57,35 @@
                 :rules ="descriptionRules"
                 required
                 ></v-textarea>
+                <v-col cols="12" lg="6" md="6" offset-md="3"> 
+
+
+                  <v-menu
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    max-width="290"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        :value="computedDateFormattedMomentjs"
+                        v-model="date"
+                        clearable
+                        label="Pick a date"
+                        readonly
+                        v-on="on"
+                        :rules = "dateRules"
+                        @click:clear="date = null"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="date"
+                      @change="menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+
+
+
                 <v-btn 
                   color="success"
                   class="mr-4"
@@ -75,13 +104,16 @@
 </v-container>
 </template>
 <script>
+import moment from 'moment'
+  // import format from 'date-fns/format'
   export default {
     data: () => ({
       title: '',
       location: '',
       imageUrl: '',
       description: "",
-     
+      date: "",
+      menu1: false,
       titleRules: [
         v => !!v || 'Title is required',
         v => (v && v.length <= 15) || 'Title must be less than 15 characters',
@@ -99,6 +131,9 @@
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
+      dateRules: [
+        v => !!v || "Date is required"
+      ]
 
     }),
 
@@ -125,7 +160,8 @@
                                 id: "4", 
                                 title: this.title ,
                                 color: "#" + Math.random().toString(16).slice(2, 8),
-                                date: "2021-01-22"
+                                date: this.date.toString(),
+                                location: this.location
                                })
         console.log("I created a new meetup")
         //  this.$refs.form.reset()
@@ -134,6 +170,16 @@
           }
       }
      
+    },
+      computed: {
+      computedDateFormattedMomentjs () {
+        console.log('the date is ' + this.date)
+        return this.date ? moment(this.date).format('YYYY-MM-DD') : ''
+      },
+      // YYYY-MM-DD
+      // computedDateFormattedDatefns () {
+      //   return this.date ? format(this.date, 'YYYY-MM-DD') : ''
+      // },
     },
   }
 </script>
