@@ -20,12 +20,7 @@
                     </v-card-subtitle>
 
                     <v-card-text class="text--primary">
-                    <!-- <h3 class="info--text">{{currentMeetup.title}}</h3> -->
-
-                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                     Qui ad veritatis cumque accusantium rerum. Nihil voluptates tempore,
-                      amet vitae ullam sit minima recusandae error molestiae? Mollitia 
-                      obcaecati enim inventore amet.</div>
+                     {{meetup.description}}
                     </v-card-text>
 
                     <v-card-actions>

@@ -11,21 +11,24 @@ export default new Vuex.Store({
        title: "Meetup New York",
        color: '#952175',
        date: "2021-01-22",
-       location: "New York"
+       location: "New York",
+       description: "New you are ok"
     },
       {src: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQU5PtF945hQNCefU7NXSFPp6AK8IcGlQioYLVYwMnjDe6mjFNa",
        id: "2" ,
        title:"Los Angeles Meetup",
        color: 'primary',
        date: "2020-09-25",
-       location: "Los Angeles"
+       location: "Los Angeles",
+       description: "Agneles are in heaven"
     },
       {src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/London_Thames_Sunset_panorama_-_Feb_2008.jpg/800px-London_Thames_Sunset_panorama_-_Feb_2008.jpg",
        id: "3" ,
        title:"London Meetup", 
        color: 'info',
        date: "2020-01-16",
-       location: "London"
+       location: "London",
+       description: "So spookey that you cannot imagine"
         // (YYYY-MM-DD) 
     }
     ],
