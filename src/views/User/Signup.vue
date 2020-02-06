@@ -34,15 +34,17 @@
                     v-model="password"
                     prepend-icon="lock"
                     type="password"
+                     
                   />
-        <!--          <v-text-field
+                   <v-text-field
                     id="confirmpassword"
                     label="Confirm Password"
                     name="confirmPassword"
                     v-model="confirmPassword"
                     prepend-icon="lock"
                     type="password"
-                  /> -->
+                    :rules =[rules.checkPasswords]
+                  />
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -70,7 +72,15 @@
         email: "",
         password: "",
         confirmPassword: "",
+        rules:{
+          checkPasswords: v => v == this.password || 'Passwords do not match'
+        }
 
+      }
+    },
+    computed:{
+      comparedPassword(){
+        return this.password !== this.confirmPassword ? 'Passwords do not match' : ''
       }
     },
     methods:{
