@@ -1,3 +1,4 @@
+require('dotenv').config()
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -10,7 +11,7 @@ Vue.config.productionTip = false
 
 
 const firebaseConfig = {
-  apiKey: process.env.apiKey ,
+  apiKey: process.env.VUE_APP_API_KEY ,
   authDomain: process.env.authDomain,
   databaseURL: process.env.databaseURL,
   projectId: "devmeetup-it",
@@ -24,7 +25,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
-require('dotenv').config()
+
 new Vue({
   router,
   store,

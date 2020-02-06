@@ -2,11 +2,11 @@
   <v-app id="inspire">
     <v-content>
       <v-container
-        class="fill-height"
+       
         fluid
       >
         <v-row
-          align="center"
+         
           justify="center"
         >
           <v-col
@@ -15,48 +15,15 @@
             md="4"
           >
             <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer />
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :href="source"
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-code-tags</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      href="https://codepen.io/johnjleider/pen/pMvGQO"
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-codepen</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Codepen</span>
-                </v-tooltip>
-              </v-toolbar>
+           
+        
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    label="Login"
-                    name="login"
-                    prepend-icon="person"
+                    label="email"
+                    name="email"
+                    v-model="email"
+                    prepend-icon="email"
                     type="text"
                   />
 
@@ -64,14 +31,24 @@
                     id="password"
                     label="Password"
                     name="password"
+                    v-model="password"
                     prepend-icon="lock"
                     type="password"
                   />
+        <!--          <v-text-field
+                    id="confirmpassword"
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    v-model="confirmPassword"
+                    prepend-icon="lock"
+                    type="password"
+                  /> -->
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary">Login</v-btn>
+                <v-btn color="primary"
+                       v-on:click="singUp()">Sign Up</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -82,9 +59,31 @@
 </template>
 
 <script>
+  import firebase from 'firebase'
   export default {
-    props: {
-      source: String,
+ mounted() {
+  // console.log(process.env.VUE_APP_API_KEY)
+  
+},
+    data(){
+      return{
+        email: "",
+        password: "",
+        confirmPassword: "",
+
+      }
     },
+    methods:{
+      singUp(){
+        firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(function(error) {
+      // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode + " " + errorMessage)
+        // ...
+      });
+      console.log(this.email + " " + this.password)
+    }
+  }
   }
 </script>
