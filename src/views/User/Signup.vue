@@ -69,6 +69,7 @@
         email: "",
         password: "",
         confirmPassword: "",
+        // define more rules for email and passwords filds
         rules:{
           checkPasswords: v => v == this.password || 'Passwords do not match'
         }
@@ -89,3 +90,5 @@
   }
   }
 </script>
+
+
