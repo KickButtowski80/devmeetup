@@ -63,10 +63,7 @@
 <script>
   import firebase from 'firebase'
   export default {
- mounted() {
-  // console.log(process.env.VUE_APP_API_KEY)
-  
-},
+
     data(){
       return{
         email: "",
@@ -78,11 +75,6 @@
 
       }
     },
-    computed:{
-      comparedPassword(){
-        return this.password !== this.confirmPassword ? 'Passwords do not match' : ''
-      }
-    },
     methods:{
       singUp(){
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(function(error) {
@@ -92,7 +84,7 @@
         console.log(errorCode + " " + errorMessage)
         // ...
       });
-      console.log(this.email + " " + this.password)
+     
     }
   }
   }
