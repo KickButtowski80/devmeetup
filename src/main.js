@@ -2,11 +2,13 @@ require('dotenv').config()
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+
 import store from './store'
 import vuetify from './plugins/vuetify';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+
 Vue.config.productionTip = false
 
 
@@ -24,7 +26,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-
+ 
 
 new Vue({
   router,

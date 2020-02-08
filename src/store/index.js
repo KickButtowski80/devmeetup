@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import router from '../router'
+import firebase from 'firebase'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -29,14 +30,9 @@ export default new Vuex.Store({
        date: "2020-01-16",
        location: "London",
        description: "So spookey that you cannot imagine"
-        // (YYYY-MM-DD) 
-    }
+        }
     ],
-    user:{
-      id: 'asdfasdaf',
-      //list meetups that user registered for 
-      registeredMeetups: [1]
-    }
+    user: null
      },
      getters:{
        loadedMeetups(state){
@@ -53,12 +49,20 @@ export default new Vuex.Store({
              return meetup.id === meetupId
            })
          }
+       },
+       user(state){
+         return state.user
        }
 
      },
     mutations: {
       createMeetup (state, newMeetup){
         state.loadedMeetups.push(newMeetup)
+      },
+      setUser(state, payload){
+        console.log(payload)
+        state.user = payload
+      
       }
     },
     actions: {
@@ -72,9 +76,34 @@ export default new Vuex.Store({
           location: payload.location
                 }
         context.commit('createMeetup', newMeetup)
-      }
-    },
-    modules: {
-     
+      },
+      signUserUp(context, payload){  
+        const self = this     
+        firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                 .then( () => {
+                    const newUser = {
+                      name: payload.name,
+                      id: '_' + Math.random().toString(36).substr(2, 9) ,
+                      registeredMeetups: []
+                    }
+                    console.log('newUser in action is ' + newUser.id + "--" + newUser.registeredMeetups)
+                    context.commit('setUser', newUser)
+                    router.push('/')
+                   }                 
+                             
+                 )
+                .catch(function(error) {
+                    // Handle Errors here.
+                      var errorCode = error.code;       
+                      self.errorMessage = error.message
+
+                      if (errorCode == 'auth/weak-password') {
+                        alert('The password is too weak.');
+                      } else {
+                        alert(self.errorMessage);
+                      }
+                      alert(error);
+                    });
+                    }
     }
 })

@@ -44,7 +44,7 @@
        </v-row>
        <v-row>
          <v-col cols="12" xs="12" class="text-center">
-           
+              <h1>welcome {{ownerProfile}}!</h1>
               <h2>Join Our awesome meetups!</h2>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
               Voluptatibus porro minima quibusdam dolor rem fuga sed atque
@@ -67,7 +67,8 @@ export default {
   },
   computed:{ 
     ...mapState({
-      meetups: state => state.loadedMeetups
+      meetups: state => state.loadedMeetups,
+      ownerProfile: state => state.user.name
     })
   }
 }

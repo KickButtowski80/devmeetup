@@ -14,13 +14,19 @@
             sm="8"
             md="4"
           >
-            <v-card class="elevation-12">
-           
-        
+            <v-card class="elevation-12">  
+
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    label="email"
+                    label="Name"
+                    name="name"
+                    v-model="name"
+                    prepend-icon="person"
+                    type="text"
+                  />
+                  <v-text-field
+                    label="Email"
                     name="email"
                     v-model="email"
                     prepend-icon="email"
@@ -52,7 +58,7 @@
                 <v-btn color="primary"
                        v-on:click="singUp()">Sign Up</v-btn>
               </v-card-actions>
-            </v-card>
+            </v-card>            
           </v-col>
         </v-row>
       </v-container>
@@ -61,14 +67,16 @@
 </template>
 
 <script>
-  import firebase from 'firebase'
+ 
   export default {
 
     data(){
       return{
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
+        errorMessage: " ",
         // define more rules for email and passwords filds
         rules:{
           checkPasswords: v => v == this.password || 'Passwords do not match'
@@ -78,16 +86,26 @@
     },
     methods:{
       singUp(){
-        firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(function(error) {
-      // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode + " " + errorMessage)
-        // ...
-      });
-     
-    }
-  }
+        const payload = {
+            name: this.name,
+            email: this.email,
+            password: this.password
+        }
+      this.$store.dispatch('signUserUp', payload )
+      }
+   },
+   computed:{
+    //  user(){
+    //    return this.$store.getters.user
+    //  }
+   },
+  //  watch:{
+  //    user(value){
+  //      if(value !== null && value !== undefined){
+  //        this.$rotuer.push('/meetups')
+  //      }
+  //    }
+  //  }
   }
 </script>
 
