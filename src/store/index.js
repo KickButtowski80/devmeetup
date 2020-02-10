@@ -32,7 +32,9 @@ export default new Vuex.Store({
        description: "So spookey that you cannot imagine"
         }
     ],
-    user: null
+    user: null,
+    loading: false,
+    error: null,
      },
      getters:{
        loadedMeetups(state){
@@ -52,6 +54,12 @@ export default new Vuex.Store({
        },
        user(state){
          return state.user
+       },
+       loading(state){
+         return state.loading
+       },
+       error(state){
+         return state.error
        }
 
      },
@@ -63,6 +71,15 @@ export default new Vuex.Store({
         console.log("setUser is " + payload.name)
         state.user = payload  
         // localStorage.setItem(state.user, JSON.stringify(payload))
+      },
+      setLoading(state, payload){
+        state.loading = payload
+      },
+      setError(state, payload){
+        state.error = payload
+      },
+      clearError(state){
+        state.error = null
       }
     },
     actions: {
@@ -78,7 +95,9 @@ export default new Vuex.Store({
         context.commit('createMeetup', newMeetup)
       },
       signUserUp(context, payload){  
-        const self = this   
+        // const self = this   
+        context.commit ('setLoading', true)
+        context.commit('clearError')
         console.log('in sign up user name is ' + payload.name)  
         firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                        .then (data => {
@@ -88,6 +107,7 @@ export default new Vuex.Store({
                              })
                        })  
                       .then( () => {
+                          context.commit ('setLoading', false)
                           const newUser = {
                             name: payload.name,
                             id: '_' + Math.random().toString(36).substr(2, 9) ,
@@ -102,32 +122,42 @@ export default new Vuex.Store({
                       )
                     .catch(function(error) {
                         // Handle Errors here.
-                          var errorCode = error.code;       
-                          self.errorMessage = error.message
+                        context.commit ('setLoading', false)
+                        context.commit('setError', error)
+                          // var errorCode = error.code;       
+                          // self.errorMessage = error.message
 
-                          if (errorCode == 'auth/weak-password') {
-                            alert('The password is too weak.');
-                          } else {
-                            alert("error message" + self.errorMessage);
-                          }
-                          alert("error is " + error);
+                          // if (errorCode == 'auth/weak-password') {
+                          //   alert('The password is too weak.');
+                          // } else {
+                          //   alert("error message" + self.errorMessage);
+                          // }
+                          // alert("error is " + error);
                         });
          },
     
          signUserIn(context,payload){
-          
+          context.commit ('setLoading', true)
+          context.commit('clearError')
           firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
              .then(() => {
+              context.commit ('setLoading', false)
                const currentUser = {
                  name: firebase.auth().currentUser.displayName,
                  id: firebase.auth().currentUser.id,
                  registeredMeetups: []
                }
+               
                context.commit('setUser', currentUser) 
                router.push('/')
-          }).catch((err) => {
-            alert(err.message)
+          }).catch((error) => {
+            context.commit ('setLoading', false)
+            context.commit('setError', error)
+            // alert(error.message)
           })
+        },
+        clearError({commit}){
+          commit('clearError')
         }
         
 

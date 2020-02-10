@@ -8,7 +8,9 @@ import vuetify from './plugins/vuetify';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import AlertComp from './components/Alert.vue'
 
+Vue.component('app-alert', AlertComp)
 Vue.config.productionTip = false
 
 
