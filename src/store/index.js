@@ -60,9 +60,9 @@ export default new Vuex.Store({
         state.loadedMeetups.push(newMeetup)
       },
       setUser(state, payload){
-        console.log(payload)
-        state.user = payload
-      
+        console.log("setUser is " + payload.name)
+        state.user = payload  
+        // localStorage.setItem(state.user, JSON.stringify(payload))
       }
     },
     actions: {
@@ -78,32 +78,60 @@ export default new Vuex.Store({
         context.commit('createMeetup', newMeetup)
       },
       signUserUp(context, payload){  
-        const self = this     
+        const self = this   
+        console.log('in sign up user name is ' + payload.name)  
         firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-                 .then( () => {
-                    const newUser = {
-                      name: payload.name,
-                      id: '_' + Math.random().toString(36).substr(2, 9) ,
-                      registeredMeetups: []
-                    }
-                    console.log('newUser in action is ' + newUser.id + "--" + newUser.registeredMeetups)
-                    context.commit('setUser', newUser)
-                    router.push('/')
-                   }                 
-                             
-                 )
-                .catch(function(error) {
-                    // Handle Errors here.
-                      var errorCode = error.code;       
-                      self.errorMessage = error.message
+                       .then (data => {
+                         data.user 
+                             .updateProfile({
+                               displayName: payload.name
+                             })
+                       })  
+                      .then( () => {
+                          const newUser = {
+                            name: payload.name,
+                            id: '_' + Math.random().toString(36).substr(2, 9) ,
+                            registeredMeetups: []
+                          }
+                          console.log('newUser in action is ' + newUser.id + "--" + newUser.registeredMeetups)
+                          context.commit('setUser', newUser)
+                          
+                          router.push('/')
+                        }                 
+                                  
+                      )
+                    .catch(function(error) {
+                        // Handle Errors here.
+                          var errorCode = error.code;       
+                          self.errorMessage = error.message
 
-                      if (errorCode == 'auth/weak-password') {
-                        alert('The password is too weak.');
-                      } else {
-                        alert(self.errorMessage);
-                      }
-                      alert(error);
-                    });
-                    }
+                          if (errorCode == 'auth/weak-password') {
+                            alert('The password is too weak.');
+                          } else {
+                            alert("error message" + self.errorMessage);
+                          }
+                          alert("error is " + error);
+                        });
+         },
+    
+         signUserIn(context,payload){
+          
+          firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+             .then(() => {
+               const currentUser = {
+                 name: firebase.auth().currentUser.displayName,
+                 id: firebase.auth().currentUser.id,
+                 registeredMeetups: []
+               }
+               context.commit('setUser', currentUser) 
+               router.push('/')
+          }).catch((err) => {
+            alert(err.message)
+          })
+        }
+        
+
     }
+    
+ 
 })

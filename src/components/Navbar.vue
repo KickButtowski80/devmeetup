@@ -13,7 +13,7 @@
       <v-spacer></v-spacer>
       <div class='hidden-xs-only '>        
           <v-btn text 
-          v-for="item in items"
+          v-for="item in menuItems"
           :key="item.title">
           <router-link v-bind:to ="item.link" tag="span">
             <v-icon left>{{item.icon}}</v-icon>
@@ -28,7 +28,7 @@
     <v-navigation-drawer v-model="drawer" app temporary>         
     <v-list>
     <v-list-item
-        v-for="item in items"
+        v-for="item in menuItems"
         :key="item.title"
         link
     > 
@@ -48,19 +48,47 @@
   </div>
 </template>
 <script>
+// import firebase from 'firebase'
 export default {
     data () {
       return {
         drawer: null,
-        items: [
+        }
+    },
+      methods: {
+        
+    },
+    computed:{
+      menuItems(){
+        let menuItems =[
+          { title: 'Sign up', icon: 'face', link: '/signup' },
+          { title: 'Sign in', icon: 'lock_open', link: '/signin' },
+        ]
+      
+      if(this.userIsAuthenticated){
+        menuItems =[
           { title: 'View Meetups', icon: 'supervisor_account', link: '/meetups' },
           { title: 'Organize Meetup', icon: 'room', link: '/meetup/create' },
           { title: 'Profile', icon: 'person', link: '/profile' },
-          { title: 'Sign up', icon: 'face', link: '/signup' },
-          { title: 'Sign in', icon: 'lock_open', link: '/signin' },
-          
-        ],
+        //  { title: 'Logout', icon: 'exit_to_app', link: '{{null}}'},
+          ]
       }
+
+      return menuItems;
     },
+    userIsAuthenticated(){
+      // let self = this
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      // var user = firebase.auth().currentUser;
+      // self.$store.getters.user = user
+      // console.log("authenticated user name is " + user.name)
+      // if (user) {
+      //   return true 
+      // } else {
+      //   return false
+      // }
+    }
+  
   }
+}
 </script>

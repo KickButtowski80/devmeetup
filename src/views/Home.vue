@@ -44,13 +44,13 @@
        </v-row>
        <v-row>
          <v-col cols="12" xs="12" class="text-center">
-              <h1>welcome {{ownerProfile}}!</h1>
+              <h1>{{owner}}</h1>
               <h2>Join Our awesome meetups!</h2>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
               Voluptatibus porro minima quibusdam dolor rem fuga sed atque
                deleniti velit eligendi, est autem ea quisquam, beatae iusto 
                dolores sunt et laborum.</p>
-             
+             <v-btn v-on:click="signOut">Sign Out</v-btn>
          </v-col>
        </v-row>
      </v-container>
@@ -58,18 +58,42 @@
 
 <script>
 import {mapState} from 'vuex' 
+import firebase from 'firebase'
+import router from '../router'
+
 export default {
   
   methods:{
     onLoadMeetup(id){
       this.$router.push("/meetups/" + id)    
-    }
+    },
+    signOut(){
+      let self = this
+       firebase.auth().signOut().then(function() {
+          self.$store.state.user = null
+          alert("successful sign out")
+          router.push('/signin')
+        }).catch(function(error) {
+          // An error happened.
+          alert("error for singout is " + error)
+        });
+     }
   },
   computed:{ 
     ...mapState({
       meetups: state => state.loadedMeetups,
       ownerProfile: state => state.user.name
-    })
+    }),
+    owner(){
+      console.log("owner name is " + this.$store.getters.user.name)
+      if(this.$store.getters.user){
+        return this.$store.getters.user.name
+      } else {
+        return ""
+      }  
+     }
+     
+    
   }
 }
 </script>
@@ -78,8 +102,7 @@ export default {
  
   .vsheet{
     background-color: rgba(0,0,0,0.2);
-    color: white;
-     
+    color: white;     
   }
 
  
