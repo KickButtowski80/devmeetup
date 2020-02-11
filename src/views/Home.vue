@@ -49,8 +49,7 @@
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
               Voluptatibus porro minima quibusdam dolor rem fuga sed atque
                deleniti velit eligendi, est autem ea quisquam, beatae iusto 
-               dolores sunt et laborum.</p>
-             <v-btn v-on:click="signOut">Sign Out</v-btn>
+               dolores sunt et laborum.</p>              
          </v-col>
        </v-row>
      </v-container>
@@ -66,18 +65,7 @@ export default {
   methods:{
     onLoadMeetup(id){
       this.$router.push("/meetups/" + id)    
-    },
-    signOut(){
-      let self = this
-       firebase.auth().signOut().then(function() {
-          self.$store.state.user = null
-          alert("successful sign out")
-          router.push('/signin')
-        }).catch(function(error) {
-          // An error happened.
-          alert("error for singout is " + error)
-        });
-     }
+    } 
   },
   computed:{ 
     ...mapState({
