@@ -158,8 +158,7 @@ export default new Vuex.Store({
         },
         clearError({commit}){
           commit('clearError')
-        }
-        
+        }        
 
     }
     
