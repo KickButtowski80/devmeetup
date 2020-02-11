@@ -57,8 +57,7 @@
 
 <script>
 import {mapState} from 'vuex' 
-import firebase from 'firebase'
-import router from '../router'
+ 
 
 export default {
   
