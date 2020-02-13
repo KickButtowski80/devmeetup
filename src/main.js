@@ -9,7 +9,8 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import AlertComp from './components/Alert.vue'
-
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 Vue.component('app-alert', AlertComp)
 Vue.config.productionTip = false
 
@@ -17,7 +18,7 @@ Vue.config.productionTip = false
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY ,
   authDomain: process.env.authDomain,
-  databaseURL: process.env.databaseURL,
+  databaseURL: process.env.VUE_APP_DATABASE_URL,
   projectId: "devmeetup-it",
   storageBucket: process.env.storageBucket,
   messagingSenderId: process.env.messagingSenderId,
@@ -28,12 +29,17 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
- 
+let db = firebase.firestore()
+export default  db ;
 
 new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    this.$store.dispatch("fetchMeetups")  
+    console.log("main js is created")
+  }
 }).$mount('#app')
 

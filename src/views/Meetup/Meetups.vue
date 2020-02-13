@@ -1,20 +1,16 @@
 <template>
     <div>
         <v-container justify="center" align="center" >
-        <v-row>
-          <v-col>
-            <v-btn v-on:click="this.meetup = sortByDate">Sort By Date</v-btn>
-          </v-col>
-        </v-row>
-            <v-row > 
+      
+           <v-row > 
                 <v-col
                 v-for="(meetup, i) in meetups"
                 :key="i"
                 cols="12"  
             
-                >
+                >              
                     <v-card
-                        :color="meetup.color"
+                        :color="meetup.data.newMeetup.color"
                         dark
                         max-width="600"
                         class="mx-auto"
@@ -25,7 +21,7 @@
                             size= "123"
                             tile
                         >
-                        <v-img :src="meetup.src"></v-img>
+                        <v-img :src="meetup.data.newMeetup.src"></v-img>
                         </v-avatar>
                     <div style="width:250px">
                             <v-card-title
@@ -33,9 +29,9 @@
                             v-text="meetup.title"
                             ></v-card-title>
                             <v-card-subtitle >
-                              location: {{meetup.location}}
+                              location: {{meetup.data.newMeetup.location}}
                               <br/>
-                              date: {{meetup.date}}
+                              date: {{meetup.data.newMeetup.date}}
                             </v-card-subtitle>
 
                     <v-card-actions> 
@@ -54,22 +50,18 @@
     </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+//   import store from './store'
+// var util = require('util')
   export default {
+  
     computed:{
-    
-       ...mapState({
-        meetups: state => state.loadedMeetups
-      }),
-
-    
-    },
-    methods:{
-       sortByDate(){     
-         console.log(this.$store.getters.loadedMeetups)   
-          return this.$store.getters.loadedMeetups
+       meetups(){   
+        console.log("====meetups list")
+        // console.log("the list---> " +  JSON.stringify(this.$store.getters.loadedMeetups[0]))          
+        return this.$store.getters.loadedMeetups
          
-      },
+         
+      }
     }
   }
 </script>

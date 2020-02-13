@@ -20,7 +20,7 @@
               <v-carousel-item
                 v-for="(meetup) in meetups"
                 :key="meetup.id"
-                :src="meetup.src"
+                :src="meetup.data.newMeetup.src"
                 reverse-transition="fade-transition"
                 transition="fade-transition"  
                 v-on:click="onLoadMeetup(meetup.id)"             
@@ -35,7 +35,7 @@
                   align="center"
                   justify="center"
                 >
-                  <div class="display-1">{{ meetup.title }} </div>
+                  <div class="display-1">{{ meetup.data.newMeetup.title }} </div>
                 </v-row>
               </v-sheet>              
               </v-carousel-item>
@@ -44,7 +44,7 @@
        </v-row>
        <v-row>
          <v-col cols="12" xs="12" class="text-center">
-              <h1>{{owner}}</h1>
+              <h1>welcome {{ownerProfile}}!</h1>
               <h2>Join Our awesome meetups!</h2>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
               Voluptatibus porro minima quibusdam dolor rem fuga sed atque
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex' 
+import {mapState, mapGetters} from 'vuex' 
  
 
 export default {
@@ -67,8 +67,10 @@ export default {
     } 
   },
   computed:{ 
+    ...mapGetters({
+      meetups: 'loadedMeetups' 
+    }),
     ...mapState({
-      meetups: state => state.loadedMeetups,
       ownerProfile: state => state.user.name
     }),
     owner(){
@@ -76,7 +78,7 @@ export default {
       if(this.$store.getters.user){
         return this.$store.getters.user.name
       } else {
-        return ""
+        return "Guest User"
       }  
      }
      
