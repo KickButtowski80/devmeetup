@@ -9,7 +9,7 @@ import {mapState} from 'vuex'
 export default {
     computed: {
         ...mapState({
-             owner_name: state => state.user.name
+             owner_name: state => state.user.displayName 
         })
     }
 }

@@ -9,8 +9,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import AlertComp from './components/Alert.vue'
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
+
 Vue.component('app-alert', AlertComp)
 Vue.config.productionTip = false
 
@@ -39,7 +38,13 @@ new Vue({
   render: h => h(App),
   created() {
     this.$store.dispatch("fetchMeetups")  
+    firebase.auth().onAuthStateChanged((firebaseUser) => {
+      if(firebaseUser){
+        store.dispatch("autoSignIn", firebaseUser)
+      }
+    })
     console.log("main js is created")
+
   }
 }).$mount('#app')
 

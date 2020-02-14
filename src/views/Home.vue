@@ -44,7 +44,7 @@
        </v-row>
        <v-row>
          <v-col cols="12" xs="12" class="text-center">
-              <h1>welcome {{ownerProfile}}!</h1>
+              <!-- <h1>welcome {{owner}}!</h1> -->
               <h2>Join Our awesome meetups!</h2>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
               Voluptatibus porro minima quibusdam dolor rem fuga sed atque
@@ -71,12 +71,12 @@ export default {
       meetups: 'loadedMeetups' 
     }),
     ...mapState({
-      ownerProfile: state => state.user.name
+      ownerProfile: state => state.user.dispalyName
     }),
     owner(){
-      console.log("owner name is " + this.$store.getters.user.name)
-      if(this.$store.getters.user){
-        return this.$store.getters.user.name
+      console.log("owner name is " + this.$store.getters.user.displayName)
+      if(this.$store.getters.user !== null){
+        return this.$store.getters.user.displayName
       } else {
         return "Guest User"
       }  

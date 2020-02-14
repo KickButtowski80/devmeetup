@@ -56,6 +56,7 @@ let store = new Vuex.Store({
       };
     },
     user(state) {
+      console.log('store user is ' + JSON.stringify(state.user))
       return state.user;
     },
     loading(state) {
@@ -74,9 +75,12 @@ let store = new Vuex.Store({
       state.loadedMeetups.push(newMeetup)
     },
     setUser(state, payload) {
-      console.log("setUser is " + payload.name)
-      state.user = payload;
-      // localStorage.setItem(state.user, JSON.stringify(payload))
+      console.log("setUser is " + JSON.stringify(payload.email))
+      state.user = payload.email
+      //I do not understand that following chaining 
+      // state.user.name = payload.displayName
+      console.log(")))))>" + JSON.stringify(state.user))
+      localStorage.setItem(state.user, JSON.stringify(payload))
     },
     setLoading(state, payload) {
       state.loading = payload;
@@ -144,11 +148,14 @@ let store = new Vuex.Store({
           console.error("Error adding document: ", error);
         });
     },
+    autoSignIn({commit}, payload){
+      commit('setUser', {email: payload})
+    },
     signUserUp(context, payload) {
       // const self = this
       context.commit("setLoading", true);
       context.commit("clearError");
-      console.log("in sign up user name is " + payload.name);
+      console.log("in sign up user name is " + JSON.stringify(payload));
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
@@ -174,6 +181,7 @@ let store = new Vuex.Store({
               "--" +
               newUser.registeredMeetups
           );
+          console.log("*****>" + JSON.stringify(newUser))
           context.commit("setUser", newUser);
 
           router.push("/");
@@ -207,7 +215,7 @@ let store = new Vuex.Store({
             id: firebase.auth().currentUser.id,
             registeredMeetups: []
           };
-         console.log(firebase.auth().currentUser)
+         console.log("@@@@@@>" + firebase.auth().currentUser.name)
           context.commit("setUser", currentUser);
           router.push("/");
         })
