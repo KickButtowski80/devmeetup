@@ -161,7 +161,8 @@ import moment from 'moment'
                                 title: this.title ,
                                 color: "#" + Math.random().toString(16).slice(2, 8),
                                 date: this.date.toString(),
-                                location: this.location
+                                location: this.location,
+                                description: this.description
                                })
         console.log("I created a new meetup")
         //  this.$refs.form.reset()

@@ -20,7 +20,7 @@
               <v-carousel-item
                 v-for="(meetup) in meetups"
                 :key="meetup.id"
-                :src="meetup.data.newMeetup.src"
+                :src="meetup.newMeetup.src"
                 reverse-transition="fade-transition"
                 transition="fade-transition"  
                 v-on:click="onLoadMeetup(meetup.id)"             
@@ -35,7 +35,7 @@
                   align="center"
                   justify="center"
                 >
-                  <div class="display-1">{{ meetup.data.newMeetup.title }} </div>
+                  <div class="display-1">{{ meetup.newMeetup.title }} </div>
                 </v-row>
               </v-sheet>              
               </v-carousel-item>

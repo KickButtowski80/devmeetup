@@ -3,14 +3,15 @@
         <v-container justify="center" align="center" >
       
            <v-row > 
-                <v-col
+              <v-col
                 v-for="(meetup, i) in meetups"
                 :key="i"
                 cols="12"  
-            
-                >              
+               
+                >   
+                     
                     <v-card
-                        :color="meetup.data.newMeetup.color"
+                        :color="meetup.newMeetup.color"
                         dark
                         max-width="600"
                         class="mx-auto"
@@ -21,7 +22,7 @@
                             size= "123"
                             tile
                         >
-                        <v-img :src="meetup.data.newMeetup.src"></v-img>
+                        <v-img :src="meetup.newMeetup.src"></v-img>
                         </v-avatar>
                     <div style="width:250px">
                             <v-card-title
@@ -29,9 +30,9 @@
                             v-text="meetup.title"
                             ></v-card-title>
                             <v-card-subtitle >
-                              location: {{meetup.data.newMeetup.location}}
+                              location: {{meetup.newMeetup.location}}
                               <br/>
-                              date: {{meetup.data.newMeetup.date}}
+                              date: {{meetup.newMeetup.date}}
                             </v-card-subtitle>
 
                     <v-card-actions> 
@@ -57,7 +58,7 @@
     computed:{
        meetups(){   
         console.log("====meetups list")
-        // console.log("the list---> " +  JSON.stringify(this.$store.getters.loadedMeetups[0]))          
+        console.log("the list---> " +  JSON.stringify(this.$store.getters.loadedMeetups))          
         return this.$store.getters.loadedMeetups
          
          

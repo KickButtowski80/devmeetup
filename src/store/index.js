@@ -40,6 +40,7 @@ let store = new Vuex.Store({
   },
   getters: {
     loadedMeetups(state) {
+      console.log('loadedMeetups are ' + JSON.stringify(state.loadedMeetups))
        return state.loadedMeetups.sort((meetupA, meetupB) => {
           return meetupA.date > meetupB.date
        })
@@ -67,9 +68,10 @@ let store = new Vuex.Store({
     }
   },
   mutations: {
-    setLoadedMeetups(state, payload){
-             
-      state.loadedMeetups= payload
+    setLoadedMeetups(state, payload){             
+      // state.loadedMeetups = payload.slice()
+      state.loadedMeetups = [...payload]
+      console.log("setLoadedMeetups " + JSON.stringify(state.loadedMeetups))
     },
     createMeetup(state, newMeetup) {
       state.loadedMeetups.push(newMeetup)
@@ -100,12 +102,15 @@ let store = new Vuex.Store({
       .then(function(querySnapshot) {
         const meetups = []
         querySnapshot.forEach(function(doc) {
-          console.log("Document data:", doc);
-          let meetup = {
-            data: doc.data(),
-            id: doc.id
+          const numberOfKeys = Object.keys(doc.data()).length;
+          //check if document is empty or not 
+          if(numberOfKeys !== 0){
+            let meetup = {            
+              id: doc.id,
+              ...doc.data()
+            }            
+            meetups.push(meetup)
           }
-          meetups.push(meetup)
         });
         console.log("all the meetups are loaded from firebase") 
         meetups.forEach( m => console.log( m ))     
@@ -118,7 +123,7 @@ let store = new Vuex.Store({
       });
     },
     createMeetup(context, payload) {
-      const newMeetup = {
+      let newMeetup = {
         src: payload.src,
         title: payload.title,
         color:
@@ -127,7 +132,8 @@ let store = new Vuex.Store({
             .toString(16)
             .slice(2, 8),
         date: payload.date,
-        location: payload.location
+        location: payload.location,
+        description: payload.description
       };
 
       db.collection("meetups")
@@ -139,8 +145,9 @@ let store = new Vuex.Store({
           console.log("Document written: ", docRef.id);
 
           context.commit("createMeetup", {
-            ...newMeetup,
-            id: docRef.id
+            id: docRef.id,
+            ...newMeetup
+            
           });
           console.log("newMeetup info is " + util.inspect(newMeetup))
         })
