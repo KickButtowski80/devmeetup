@@ -6,7 +6,7 @@
               <v-col
                 v-for="(meetup, i) in meetups"
                 :key="i"
-                cols="12"  
+                cols="12" 
                
                 >   
                      

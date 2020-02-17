@@ -16,7 +16,7 @@
                     <v-card-title>{{meetup.newMeetup.title}}</v-card-title>
                     </v-img>
               
-                    <v-card-subtitle class="pb-0 info--text">{{meetup.newMeetup.date}} which take place at
+                    <v-card-subtitle class="pb-0 info--text">{{meetup.newMeetup.date}} which take place
                     {{meetup.newMeetup.location }}
                     </v-card-subtitle>
 

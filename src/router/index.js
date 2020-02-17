@@ -12,6 +12,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '*',
+    redirect: '/'
+  },
+  {
     path: '/',
     name: 'home',
     component: Home
@@ -34,7 +38,8 @@ const routes = [
     path: '/meetups/:id',
     props: true,
     name: "Meetup",
-    component: Meetup
+    component: Meetup,
+    beforeEnter:  AuthGuard
   },
   {
     path:'/meetups',
@@ -44,7 +49,8 @@ const routes = [
   {
     path: '/profile',
     name: "profile",
-    component: Profile
+    component: Profile,
+    beforeEnter:  AuthGuard
   },
   {
     path: '/signin',
