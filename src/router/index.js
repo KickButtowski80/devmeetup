@@ -32,7 +32,7 @@ const routes = [
     path:'/meetup/create',
     name:"CreateMeetup",
     component: CreateMeetup,
-    beforeEnter:  AuthGuard
+    // beforeEnter:  AuthGuard
   },
   {
     path: '/meetups/:id',

@@ -19,7 +19,7 @@ const firebaseConfig = {
   authDomain: process.env.authDomain,
   databaseURL: process.env.VUE_APP_DATABASE_URL,
   projectId: "devmeetup-it",
-  storageBucket: process.env.storageBucket,
+  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.messagingSenderId,
   appId: process.env.appId,
   measurementId: process.env.measurementId
