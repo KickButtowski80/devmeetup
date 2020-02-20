@@ -25,7 +25,7 @@
                 <v-text-field
                 name="location"
                 label="location"
-                 prepend-icon="place"
+                prepend-icon="place"
                 id = "location"
                 v-model="location"
                 :rules="locationRules"
@@ -52,17 +52,17 @@
                     label=""
                     placeholder="Select your files"
                     prepend-icon="mdi-paperclip"
-                                    
+                    @click:clear ="onClearClicked"                
                   >
                 </v-file-input> 
                 
-         <v-progress-linear 
+                <v-progress-linear 
                   rounded
-                   id="uploader" height="25" value="0" v-model="photoUploaded">
-                   
-                       <strong>{{photoUploaded}}%</strong> 
-                 
-                 </v-progress-linear>
+                  height="25"
+                  value="0" 
+                  v-model="photoUploaded">                   
+                       <strong>{{Math.ceil(photoUploaded)}}%</strong>                  
+                </v-progress-linear>
                 <v-row>
                     <v-chip
                     class="ma-2"
@@ -72,7 +72,7 @@
                     Preview
                     </v-chip>
                     <v-col 
-                    ><img  height="150px" :src="imageFiles"  ></v-col>
+                    ><img  height="150px" :src="imageUrl"  ></v-col>
                 </v-row>
                 
                 <v-textarea
@@ -135,7 +135,7 @@
 <script>
 import moment from 'moment'
 import firebase from "firebase";
-  // import format from 'date-fns/format'
+// import format from 'date-fns/format'
   export default {
     data: () => ({
       title: '',
@@ -148,13 +148,11 @@ import firebase from "firebase";
       menu1: false,
       titleRules: [
         v => !!v || 'Title is required',
-        v => (v && v.length <= 15) || 'Title must be less than 15 characters',
+        v => (v && v.length <= 30) || 'Title must be less than 30 characters',
       ],
-   
       locationRules:[
             v => !!v || 'Location is required'
       ],
-       
       descriptionRules:[
           v=> !!v || "description is required"
       ],
@@ -170,43 +168,42 @@ import firebase from "firebase";
     }),
 
     methods: {
-     pickaphoto(){
-       let uploader = document.getElementById('uploader')
+     onClearClicked(){
+       console.log("cleared the file input ")
+       this.photoUploaded = 0
+       this.imageUrl = ''
+     },
+     pickaphoto(){       
        const pickimage = this.imageFiles
-
-       let storageRef =firebase.storage().ref('meetup_pics/' + pickimage.name)
-       var task = storageRef.put(pickimage)
-       task.on('state_changed', 
-         function progress(snapshot){
-         
-           console.log(snapshot);
-           var percentage = (snapshot.bytesTransferred/ snapshot.totalBytes) * 100
-             console.log("%" + percentage)
-           uploader.value = percentage
-           console.log("photo value " + uploader.value )
-         },
-         function error(err){
-           console.log('uploading error is ' + err)
-         }
-         
-         
-         )
+       console.log("pick image is " + pickimage)
+       if(pickimage !== undefined){
+          let storageRef =firebase.storage().ref('meetup_pics/' + pickimage.name)
+          var task = storageRef.put(pickimage)
+          task.on('state_changed', 
+            snapshot => {
+              console.log(snapshot);
+              var percentage = (snapshot.bytesTransferred/ snapshot.totalBytes) * 100
+              console.log("%" + percentage)
+              this.photoUploaded = percentage
+              console.log("photo value " + this.photoUploaded)
+            
+            },
+            function error(err){
+              console.log('uploading error is ' + err)
+            }, 
+            () => {
+                task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                  this.imageUrl = downloadURL
+                  console.log('File available at', downloadURL);
+                })
+            })
+       }
      },
  
       reset () {
         this.$refs.form.reset()
       } ,
-          
-      // createNewMeetup(){
-          // if(this.$refs.form.validate()){         
-        //   console.log(this.title + " " + this.location + " " + this.description)
-        //   this.$store.state.loadedMeetups.push({
-            
-        //   })
-        //  this.$refs.form.reset()
-        //   }
-      // }
-          createNewMeetup(){
+     createNewMeetup(){
           if(this.$refs.form.validate()){                
                 this.$store.dispatch('createMeetup', 
                                 {
@@ -218,9 +215,6 @@ import firebase from "firebase";
                                 location: this.location,
                                 description: this.description
                                })
-        console.log("I created a new meetup")
-        //  this.$refs.form.reset()
-        //redirect to all meetups page 
          this.$router.push('/meetups') 
           }
       }
