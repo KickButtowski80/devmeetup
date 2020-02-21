@@ -32,19 +32,7 @@
                 required
                 ></v-text-field>
 
-              <!--  <v-text-field
-                name="imgUrl"
-                label="Image URL"
-                id = "image-url" 
-                v-model="imageUrl" 
-                required
-                ></v-text-field> -->
-                <!-- you can have multiple prop to accept more than one pic at the same time 
-                 <v-file-input accept="image/*" 
-                               label="File input"
-                               v-click:change="pickAMeetupPic"
-                               id="fileButton">
-                </v-file-input>-->
+       
                 <v-file-input
                     v-model="imageFiles"
                     @change="pickaphoto"               
@@ -112,10 +100,7 @@
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
-
-
-
-                <v-btn 
+               <v-btn 
                   color="success"
                   class="mr-4"
                   @click="createNewMeetup()">Create</v-btn>
@@ -126,10 +111,13 @@
                 @click="reset"
                 >
                 Reset
-                </v-btn>              
-            </v-form>        
+                </v-btn>    
+                         
+            </v-form>     
+             
         </v-col>
     </v-row>
+  
 </v-container>
 </template>
 <script>
@@ -174,6 +162,7 @@ import firebase from "firebase";
        this.imageUrl = ''
      },
      pickaphoto(){       
+       
        const pickimage = this.imageFiles
        console.log("pick image is " + pickimage)
        if(pickimage !== undefined){
@@ -204,23 +193,27 @@ import firebase from "firebase";
         this.$refs.form.reset()
       } ,
      createNewMeetup(){
-          if(this.$refs.form.validate()){                
-                this.$store.dispatch('createMeetup', 
-                                {
-                                src:  this.imageUrl,
-                                id: "4", 
-                                title: this.title ,
-                                color: "#" + Math.random().toString(16).slice(2, 8),
-                                date: this.date.toString(),
-                                location: this.location,
-                                description: this.description
-                               })
+          if(this.$refs.form.validate()){      
+          let payload =       {
+                              src:  this.imageUrl,
+                              title: this.title ,
+                              color: "#" + Math.random().toString(16).slice(2, 8),
+                              date: this.date.toString(),
+                              location: this.location,
+                              description: this.description
+                              }
+                              console.log("creatmeetup view " + JSON.stringify(payload))
+          this.$store.dispatch('createMeetup', payload)
+         
          this.$router.push('/meetups') 
           }
       }
      
     },
       computed: {
+      userInfo(){
+        return this.$store.getters.user
+      },
       computedDateFormattedMomentjs () {
         console.log('the date is ' + this.date)
         return this.date ? moment(this.date).format('YYYY-MM-DD') : ''

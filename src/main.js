@@ -9,8 +9,9 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import AlertComp from './components/Alert.vue'
-
+import EditMeetupDetailsDialog from './views/Meetup/Edit/EditMeetupDetailsDialog'
 Vue.component('app-alert', AlertComp)
+Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog )
 Vue.config.productionTip = false
 
 

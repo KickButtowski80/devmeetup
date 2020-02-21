@@ -70,10 +70,12 @@ let store = new Vuex.Store({
   mutations: {
     setLoadedMeetups(state, payload){             
       // state.loadedMeetups = payload.slice()
+      console.log("setLoadedMeetups payload is  " + JSON.stringify(payload))
       state.loadedMeetups = [...payload]
       console.log("setLoadedMeetups " + JSON.stringify(state.loadedMeetups))
     },
     createMeetup(state, newMeetup) {
+      console.log('mutation for create meetup is ' + JSON.stringify(newMeetup))
       state.loadedMeetups.push(newMeetup)
     },
     setUser(state, payload) {
@@ -103,12 +105,13 @@ let store = new Vuex.Store({
         const meetups = []
         querySnapshot.forEach(function(doc) {
           const numberOfKeys = Object.keys(doc.data()).length;
+          console.log("fetching docs are " + JSON.stringify(doc.data()))
           //check if document is empty or not 
           if(numberOfKeys !== 0){
-            let meetup = {            
+            let meetup = {
               id: doc.id,
               ...doc.data()
-            }            
+            }
             meetups.push(meetup)
           }
         });
@@ -123,6 +126,7 @@ let store = new Vuex.Store({
       });
     },
     createMeetup(context, payload) {
+      console.log("creatmeetup payload is " + JSON.stringify(payload))
       let newMeetup = {
         src: payload.src,
         title: payload.title,
@@ -138,18 +142,22 @@ let store = new Vuex.Store({
 
       db.collection("meetups")
         .add({
-          newMeetup
+          ...newMeetup,
+          creatorId: context.state.user.uid,
+         
         })
         .then(function(docRef) {
           // const key = docRef.id
           console.log("Document written: ", docRef.id);
 
           context.commit("createMeetup", {
-            id: docRef.id,
-            ...newMeetup
+            ...newMeetup,
+            creatorId: context.state.user.uid,
+            id: docRef.id
             
           });
           console.log("newMeetup info is " + util.inspect(newMeetup))
+
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
@@ -197,15 +205,6 @@ let store = new Vuex.Store({
           // Handle Errors here.
           context.commit("setLoading", false);
           context.commit("setError", error);
-          // var errorCode = error.code;
-          // self.errorMessage = error.message
-
-          // if (errorCode == 'auth/weak-password') {
-          //   alert('The password is too weak.');
-          // } else {
-          //   alert("error message" + self.errorMessage);
-          // }
-          // alert("error is " + error);
         });
     },
 
@@ -229,7 +228,6 @@ let store = new Vuex.Store({
         .catch(error => {
           context.commit("setLoading", false)
           context.commit("setError", error);
-          // alert(error.message)
         });
     },
     clearError({ commit }) {
@@ -237,5 +235,5 @@ let store = new Vuex.Store({
     }
   }
 });
-// store.dispatch("fetchMeetups")
+
 export default store;

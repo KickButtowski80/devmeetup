@@ -3,6 +3,7 @@
         <v-container justify="center" align="center" >
       
            <v-row > 
+           
               <v-col
                 v-for="(meetup, i) in meetups"
                 :key="i"
@@ -11,7 +12,7 @@
                 >   
                      
                     <v-card
-                        :color="meetup.newMeetup.color"
+                        :color="meetup.color"
                         dark
                         max-width="600"
                         class="mx-auto"
@@ -22,7 +23,7 @@
                             size= "123"
                             tile
                         >
-                        <v-img :src="meetup.newMeetup.src"></v-img>
+                        <v-img :src="meetup.src"></v-img>
                         </v-avatar>
                     <div style="width:250px">
                             <v-card-title
@@ -30,9 +31,9 @@
                             v-text="meetup.title"
                             ></v-card-title>
                             <v-card-subtitle >
-                              location: {{meetup.newMeetup.location}}
+                              location: {{meetup.location}}
                               <br/>
-                              date: {{meetup.newMeetup.date}}
+                              date: {{meetup.date}}
                             </v-card-subtitle>
 
                     <v-card-actions> 

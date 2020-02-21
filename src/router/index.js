@@ -39,7 +39,7 @@ const routes = [
     props: true,
     name: "Meetup",
     component: Meetup,
-    beforeEnter:  AuthGuard
+    // beforeEnter:  AuthGuard
   },
   {
     path:'/meetups',
