@@ -5,7 +5,9 @@
         <v-col> 
         <v-spacer></v-spacer>
         <template v-if="currentUser">
-            <app-edit-meetup-details-dialog id="x"></app-edit-meetup-details-dialog>
+            <app-edit-meetup-details-dialog  id='x' v-bind:meetup="meetup">
+                 
+            </app-edit-meetup-details-dialog>
         </template>
         </v-col>
     </v-row>
@@ -44,7 +46,7 @@
                         </v-btn> 
                     </v-card-actions>
                 </v-card>              
-            <!--<h1>{{userInfo.uid}}--{{meetup}}</h1>-->
+           
             </v-col>
         </v-row>
     </v-container>
@@ -54,12 +56,6 @@
 //  import {mapGetters} from 'vuex'
  
 export default {
-     
-    data() {
-        return {
-  
-        }
-    },
     // set the props true so we can use the id as prop here to find 
     // current meetup group
     props: ['id'],
@@ -72,8 +68,15 @@ export default {
             return this.$store.getters.user
         },
         currentUser(){
-            console.log("current user " + this.$store.getters.user)
-            return this.$store.getters.user.uid == this.meetup.creatorId
+            console.log("user authnenticated " + JSON.stringify(this.$store.getters.user))
+            if (!this.userIsAunthenticated)
+                return false
+            else
+         
+              return this.$store.getters.user.uid == this.meetup.creatorId
+        },
+        userIsAunthenticated(){
+            return this.$store.getters.user !== null && this.$store.getters.user !== undefined
         }
         
     },
