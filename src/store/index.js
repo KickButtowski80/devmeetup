@@ -78,6 +78,25 @@ let store = new Vuex.Store({
       console.log('mutation for create meetup is ' + JSON.stringify(newMeetup))
       state.loadedMeetups.push(newMeetup)
     },
+    updateMeetup(state, payload) {
+      const meetup = state.loadedMeetups.find(meetup => {
+        return meetup.id == payload.id
+      })
+      if (payload.title) {
+        meetup.title = payload.title
+      }
+      if (payload.description) {
+        meetup.description = payload.description
+      }
+
+      if (payload.date) {
+        meetup.date = payload.date
+      }
+
+      if (payload.location) {
+        meetup.location = payload.location 
+      }
+    },
     setUser(state, payload) {
       console.log("setUser is " + JSON.stringify(payload.email))
       state.user = payload.email
@@ -162,6 +181,41 @@ let store = new Vuex.Store({
         .catch(function(error) {
           console.error("Error adding document: ", error);
         });
+    },
+    updateMeetupData({ commit }, payload) {
+      //for now just, I pass title dateand description and  location after 
+      commit("setLoading", true)
+      // const updatedObj = {} 
+      // if (payload.title) {
+      //   updatedObj.title = payload.title
+      // }
+      // if (payload.description) {
+      //   updatedObj.description = payload.description
+      // }
+
+      // if (payload.date) {
+      //   updatedObj.date = payload.date
+      // }
+  
+      db.collection("meetups")
+        .doc(payload.id)
+        .update({
+          
+            title: payload.title,
+            description : payload.description,
+            date: payload.date,
+            location: payload.location
+          
+        })
+        .then(() => {
+           commit('setLoading', false)
+          //console.log("I am updeting " + JSON.stringify(payload) + " " + JSON.stringify(updatedObj))
+          commit ('updateMeetup', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+      })
     },
     autoSignIn({commit}, payload){
       commit('setUser', {email: payload})
