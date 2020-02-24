@@ -36,9 +36,14 @@ let store = new Vuex.Store({
     ],
     user: null,
     loading: false,
-    error: null
+    error: null,
+    registeredMeetups: ["eMtJqfCIa5IF34RLu4Zs"]
   },
   getters: {
+    registeredMeetups(state){
+      console.log("))))" + JSON.stringify(state.user.registeredMeetups))
+      return state.registeredMeetups
+    },
     loadedMeetups(state) {
       console.log('loadedMeetups are ' + JSON.stringify(state.loadedMeetups))
        return state.loadedMeetups.sort((meetupA, meetupB) => {
@@ -57,9 +62,9 @@ let store = new Vuex.Store({
       };
     },
     user(state) {
-      console.log('store user is ' + JSON.stringify(state.user))
-      return state.user;
+       return state.user;
     },
+
     loading(state) {
       return state.loading;
     },
@@ -98,11 +103,13 @@ let store = new Vuex.Store({
       }
     },
     setUser(state, payload) {
-      console.log("setUser is " + JSON.stringify(payload.email))
-      state.user = payload.email
+      console.log("setUser payload is " + JSON.stringify(payload))
+
+      state.user = {...payload} 
+      console.log('user === payload' + `${state.user === payload}`)
       //I do not understand that following chaining 
       // state.user.name = payload.displayName
-      console.log(")))))>" + JSON.stringify(state.user))
+      
       localStorage.setItem(state.user, JSON.stringify(payload))
     },
     setLoading(state, payload) {
@@ -158,7 +165,7 @@ let store = new Vuex.Store({
         location: payload.location,
         description: payload.description
       };
-
+      console.log("user inof is " + JSON.stringify(context.state.user.uid))
       db.collection("meetups")
         .add({
           ...newMeetup,
@@ -199,13 +206,11 @@ let store = new Vuex.Store({
   
       db.collection("meetups")
         .doc(payload.id)
-        .update({
-          
+        .update({          
             title: payload.title,
             description : payload.description,
             date: payload.date,
-            location: payload.location
-          
+            location: payload.location          
         })
         .then(() => {
            commit('setLoading', false)
@@ -218,7 +223,7 @@ let store = new Vuex.Store({
       })
     },
     autoSignIn({commit}, payload){
-      commit('setUser', {email: payload})
+     commit('setUser', payload)
     },
     signUserUp(context, payload) {
       // const self = this
@@ -230,18 +235,22 @@ let store = new Vuex.Store({
         .createUserWithEmailAndPassword(payload.email, payload.password)
         .then(data => {
           data.user.updateProfile({
-            displayName: payload.name
+            displayName: payload.name,           
           });
+          return data
         })
-        .then(() => {
+        .then((data) => {
           context.commit("setLoading", false);
+          
           const newUser = {
             name: payload.name,
-            id:
-              "_" +
-              Math.random()
-                .toString(36)
-                .substr(2, 9),
+            id: data.user.uid,
+            // id:
+            //   "_" +
+            //   Math.random()
+            //     .toString(36)
+            //     .substr(2, 9),
+            email: payload.email,
             registeredMeetups: []
           };
           console.log(

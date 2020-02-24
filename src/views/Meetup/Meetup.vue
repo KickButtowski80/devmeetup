@@ -5,8 +5,7 @@
         <v-col> 
         <v-spacer></v-spacer>
         <template v-if="currentUser">
-            <app-edit-meetup-details-dialog  id='x' v-bind:meetup="meetup">
-                 
+            <app-edit-meetup-details-dialog  id='x' v-bind:meetup="meetup">                 
             </app-edit-meetup-details-dialog>
         </template>
         </v-col>
@@ -38,11 +37,8 @@
                     <v-card-actions>
 
                       
-                        <v-btn
-                            color="orange"
-                            text
-                        >
-                            Register
+                        <v-btn>
+                            <app-register-meetup-dialog v-bind:meetupId="this.id"></app-register-meetup-dialog>
                         </v-btn> 
                     </v-card-actions>
                 </v-card>              
@@ -60,15 +56,14 @@ export default {
     // current meetup group
     props: ['id'],
     computed:{
-        meetup() {
-            console.log('current meetup ' + JSON.stringify(this.$store.getters.loadedMeetup(this.id)))
+        meetup() {           
             return this.$store.getters.loadedMeetup(this.id)
         },
         userInfo(){
             return this.$store.getters.user
         },
         currentUser(){
-            console.log("user authnenticated " + JSON.stringify(this.$store.getters.user))
+            
             if (!this.userIsAunthenticated)
                 return false
             else
