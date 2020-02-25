@@ -38,7 +38,8 @@
 
                       
                         <v-btn>
-                            <app-register-meetup-dialog v-bind:meetupId="this.id"></app-register-meetup-dialog>
+                            <app-register-meetup-dialog v-bind:id="this.id"></app-register-meetup-dialog>
+                            
                         </v-btn> 
                     </v-card-actions>
                 </v-card>              

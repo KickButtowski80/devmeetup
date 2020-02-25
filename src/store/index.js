@@ -37,7 +37,6 @@ let store = new Vuex.Store({
     user: null,
     loading: false,
     error: null,
-    registeredMeetups: ["eMtJqfCIa5IF34RLu4Zs"]
   },
   getters: {
     registeredMeetups(state){
@@ -235,29 +234,36 @@ let store = new Vuex.Store({
         .createUserWithEmailAndPassword(payload.email, payload.password)
         .then(data => {
           data.user.updateProfile({
-            displayName: payload.name,           
+            displayName: payload.name,
+            providerData:{
+              registeredMeetups: []
+            }           
           });
+          // data.user.setValue({
+          //   registeredMeetups: []
+          // }            
+          // )
           return data
         })
         .then((data) => {
           context.commit("setLoading", false);
           
           const newUser = {
-            name: payload.name,
+            // name: payload.name,
             id: data.user.uid,
             // id:
             //   "_" +
             //   Math.random()
             //     .toString(36)
             //     .substr(2, 9),
-            email: payload.email,
+            // email: payload.email,
             registeredMeetups: []
           };
           console.log(
             "newUser in action is " +
               newUser.id +
               "--" +
-              newUser.registeredMeetups
+              newUser.registeredMeetups.length
           );
           console.log("*****>" + JSON.stringify(newUser))
           context.commit("setUser", newUser);
