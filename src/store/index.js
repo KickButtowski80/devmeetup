@@ -35,6 +35,7 @@ let store = new Vuex.Store({
       //     }
     ],
     user: null,
+    profileInfo: [{id: "5tfMn53LuYSDxY9M5eksTDhciT22" , name: "test2" , registeredMeetups: []}],
     loading: false,
     error: null
   },
@@ -59,6 +60,9 @@ let store = new Vuex.Store({
     user(state) {
       console.log('store user is ' + JSON.stringify(state.user))
       return state.user;
+    },
+    profileinfo(state){
+      return state.profileInfo
     },
     loading(state) {
       return state.loading;
@@ -104,6 +108,9 @@ let store = new Vuex.Store({
       // state.user.name = payload.displayName
       console.log(")))))>" + JSON.stringify(state.user))
       localStorage.setItem(state.user, JSON.stringify(payload))
+    },
+    setProfileInfo(state, payload){
+       state.profileInfo.push(payload)
     },
     setLoading(state, payload) {
       state.loading = payload;
@@ -232,16 +239,17 @@ let store = new Vuex.Store({
           data.user.updateProfile({
             displayName: payload.name
           });
+          return data
         })
-        .then(() => {
+        .then((data) => {
           context.commit("setLoading", false);
           const newUser = {
             name: payload.name,
-            id:
-              "_" +
-              Math.random()
-                .toString(36)
-                .substr(2, 9),
+            id: data.user.uid,
+              // "_" +
+              // Math.random()
+              //   .toString(36)
+              //   .substr(2, 9),
             registeredMeetups: []
           };
           console.log(
@@ -251,6 +259,18 @@ let store = new Vuex.Store({
               newUser.registeredMeetups
           );
           console.log("*****>" + JSON.stringify(newUser))
+          db.collection("profilesinfo")
+            .add({
+              newUser
+            })
+            .then(function() {
+              context.commit("setProfileInfo", newUser)
+              console.log("Document successfully written!");
+          })
+          .catch(function(error) {
+              console.error("Error writing document: ", error);
+          });
+          
           context.commit("setUser", newUser);
 
           router.push("/");
@@ -260,6 +280,8 @@ let store = new Vuex.Store({
           context.commit("setLoading", false);
           context.commit("setError", error);
         });
+
+        
     },
 
     signUserIn(context, payload) {

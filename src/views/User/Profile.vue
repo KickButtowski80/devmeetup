@@ -1,4 +1,5 @@
 <template  >
+<div>
   <v-card
     class="mx-auto"
     max-width="434"
@@ -45,6 +46,8 @@
       </v-row>
     </v-img>
   </v-card>
+  <h1>profile info: {{this.$store.getters.profileinfo}}</h1>
+  </div>
 </template>
 <script>
 import {mapState} from 'vuex' 
@@ -57,7 +60,10 @@ export default {
         meetups(){
            return this.$store.getters.loadedMeetups
                         .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
-        } 
+        },
+        profileInfo(){
+          return this.$store.state.user
+        }
     }
 }
 </script>

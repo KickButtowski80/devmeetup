@@ -22,7 +22,7 @@
             {{item.title}}
             </router-link>
           </v-btn>  
-       
+         
           <v-btn text v-show="userIsAuthenticated" >
             <router-link v-on:click.native="signOut"  to="/signin"  tag="span" > 
               <v-icon left >exit_to_app</v-icon>   
@@ -49,7 +49,8 @@
           <v-list-item-content>
           <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>     
-      </router-link>      
+      </router-link>     
+      
       </v-list-item>    
       <v-list-item link v-show="userIsAuthenticated" >
           <v-list-item-icon>
@@ -91,6 +92,7 @@ export default {
     },
     created () { 
     //  this.user = firebase.auth().currentUser || false;
+   
      
    },
     computed:{
@@ -104,7 +106,7 @@ export default {
         menuItems =[
           { title: 'View Meetups', icon: 'supervisor_account', link: '/meetups' },
           { title: 'Organize Meetup', icon: 'room', link: '/meetup/create' },
-          { title: 'Profile', icon: 'person', link: '/profile' },      
+          { title: 'Profile', icon: 'person', link: '/users/' + this.$store.getters.user.displayName + '/profile' },      
           ]
       }
 
