@@ -46,7 +46,7 @@
       </v-row>
     </v-img>
   </v-card>
-  <h1>profile info: {{this.$store.getters.profileinfo}}</h1>
+  <h1>profile info: {{this.profilesInfo}}</h1>
   </div>
 </template>
 <script>
@@ -61,9 +61,17 @@ export default {
            return this.$store.getters.loadedMeetups
                         .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
         },
-        profileInfo(){
-          return this.$store.state.user
+        profilesInfo(){
+          // return currentUserProfile =>{
+            
+           let currentUserProfile = this.$store.state.profilesInfo
+                          .find( userProfile =>
+                                 userProfile.id === "l7IbjBHtb2NguIVNLNC2Q0E0mVZ2")
+           return currentUserProfile
+          // } 
         }
+
+                         
     }
 }
 </script>

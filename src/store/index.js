@@ -35,7 +35,7 @@ let store = new Vuex.Store({
       //     }
     ],
     user: null,
-    profileInfo: [{id: "5tfMn53LuYSDxY9M5eksTDhciT22" , name: "test2" , registeredMeetups: []}],
+    profilesInfo: [],
     loading: false,
     error: null
   },
@@ -61,8 +61,8 @@ let store = new Vuex.Store({
       console.log('store user is ' + JSON.stringify(state.user))
       return state.user;
     },
-    profileinfo(state){
-      return state.profileInfo
+    profilesInfo(state){
+      return state.profilesInfo
     },
     loading(state) {
       return state.loading;
@@ -77,6 +77,9 @@ let store = new Vuex.Store({
       console.log("setLoadedMeetups payload is  " + JSON.stringify(payload))
       state.loadedMeetups = [...payload]
       console.log("setLoadedMeetups " + JSON.stringify(state.loadedMeetups))
+    },
+    setLoadedProfilesInfo(state, payload){
+      state.profilesInfo = [...payload]   
     },
     createMeetup(state, newMeetup) {
       console.log('mutation for create meetup is ' + JSON.stringify(newMeetup))
@@ -109,8 +112,8 @@ let store = new Vuex.Store({
       console.log(")))))>" + JSON.stringify(state.user))
       localStorage.setItem(state.user, JSON.stringify(payload))
     },
-    setProfileInfo(state, payload){
-       state.profileInfo.push(payload)
+    setProfilesInfo(state, payload){
+       state.profilesInfo.push(payload)
     },
     setLoading(state, payload) {
       state.loading = payload;
@@ -144,6 +147,34 @@ let store = new Vuex.Store({
         console.log("all the meetups are loaded from firebase") 
         meetups.forEach( m => console.log( m ))     
         context.commit('setLoadedMeetups', meetups)
+        context.commit('setLoading', false)  
+      })
+      .catch(error => {
+        console.log(error);
+        // context.commit('setLoading', true)
+      });
+    },
+    fetchprofilesInfo(context){
+      context.commit('setLoading', true)
+      db.collection("profilesInfo")
+      .get()
+      .then(function(querySnapshot) {
+        const profilesInfo = []
+        querySnapshot.forEach(function(doc) {
+          const numberOfKeys = Object.keys(doc.data()).length;
+          console.log("fetching docs are " + JSON.stringify(doc.data()))
+          //check if document is empty or not 
+          if(numberOfKeys !== 0){
+            // let profileInfo = {
+            //   id: doc.id,
+            //   ...doc.data()
+            // }
+            profilesInfo.push({...doc.data()})
+          }
+        });
+        console.log("all the profilesInfo are loaded from firebase") 
+        profilesInfo.forEach( p => console.log( p ))     
+        context.commit('setLoadedProfilesInfo', profilesInfo)
         context.commit('setLoading', false)  
       })
       .catch(error => {
@@ -259,12 +290,17 @@ let store = new Vuex.Store({
               newUser.registeredMeetups
           );
           console.log("*****>" + JSON.stringify(newUser))
-          db.collection("profilesinfo")
+          db.collection("profilesInfo")
             .add({
-              newUser
+              id: data.user.uid,
+              // "_" +
+              // Math.random()
+              //   .toString(36)
+              //   .substr(2, 9),
+            registeredMeetups: []
             })
             .then(function() {
-              context.commit("setProfileInfo", newUser)
+              context.commit("setProfilesInfo", newUser)
               console.log("Document successfully written!");
           })
           .catch(function(error) {
