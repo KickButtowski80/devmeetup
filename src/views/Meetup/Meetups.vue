@@ -57,12 +57,8 @@
   export default {
   
     computed:{
-       meetups(){   
-        console.log("====meetups list")
-        console.log("the list---> " +  JSON.stringify(this.$store.getters.loadedMeetups))          
+       meetups(){     
         return this.$store.getters.loadedMeetups
-         
-         
       }
     }
   }

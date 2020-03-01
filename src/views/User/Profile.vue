@@ -59,14 +59,14 @@ export default {
         }),
         meetups(){
            return this.$store.getters.loadedMeetups
-                        .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
+                       .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
         },
         profilesInfo(){
           // return currentUserProfile =>{
             
            let currentUserProfile = this.$store.state.profilesInfo
                           .find( userProfile =>
-                                 userProfile.id === "l7IbjBHtb2NguIVNLNC2Q0E0mVZ2")
+                                 userProfile.id === this.$store.getters.user.uid)
            return currentUserProfile
           // } 
         }

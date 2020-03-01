@@ -63,8 +63,7 @@ import moment from 'moment'
   //add rules for fields 
     data () {
       return {
-        editDialog: false,
-        userInfo: JSON.stringify(this.$store.getters.user),
+        editDialog: false, 
         editedTitle: this.meetup.title,
         editedDescription: this.meetup.description,
         editedDate: this.meetup.date,
@@ -95,7 +94,7 @@ import moment from 'moment'
     methods:{
       onSaveChanges(){
         //check for empty fields by decribing rules later
-        console.log("refs are " + this.$refs.editDialog)
+        
         if (this.$refs.form.validate()) {
             this.editDialog = false
             this.$store.dispatch('updateMeetupData', {
