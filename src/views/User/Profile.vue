@@ -62,13 +62,10 @@ export default {
                        .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
         },
         profilesInfo(){
-          // return currentUserProfile =>{
-            
            let currentUserProfile = this.$store.state.profilesInfo
                           .find( userProfile =>
                                  userProfile.id === this.$store.getters.user.uid )
-           return currentUserProfile
-          // } 
+           return currentUserProfile         
         }
 
                          
