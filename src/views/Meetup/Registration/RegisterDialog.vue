@@ -14,8 +14,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="registerDialog = false">Stay</v-btn>
-          <v-btn color="green darken-1" text @click="changeRegisterationStatus">Leave</v-btn>
+          <v-btn color="green darken-1" text @click="registerDialog = false">Disagree</v-btn>
+          <v-btn color="green darken-1" text @click="changeRegisterationStatus">Agree</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
