@@ -7,15 +7,15 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title class="headline">Your Registration Status?</v-card-title>
+        <v-card-title class="headline">Your Registration Status</v-card-title>
         <v-card-text> 
-          <p>--::::{{userIsRegisterd}} </p>
-        
+          <p>Would you like to {{registerStatus}}?</p>
+         <!-- <p>--::::{{userIsRegisterd}} -- {{userProfileInfo}} </p> -->        
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="registerDialog = false">Disagree</v-btn>
-          <v-btn color="green darken-1" text @click="changeRegisterationStatus">{{registerStatus}}</v-btn>
+          <v-btn color="green darken-1" text @click="registerDialog = false">Stay</v-btn>
+          <v-btn color="green darken-1" text @click="changeRegisterationStatus">Leave</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,7 +32,22 @@ export default {
   },
   methods:{
     changeRegisterationStatus(){
+
       this.registerDialog = false
+      const list =this.userProfileInfo[0]["registeredMeetups"]
+      const meetup = list.indexOf(this.meetup_id)
+
+      this.$store.dispatch('changeRegistrationStatus', {
+         meetup: meetup,
+         meetup_id: this.meetupId,
+         profileInfoId:  this.userProfileInfo[0].id
+         
+         })
+      // 
+      // if(meetup !== -1)
+      //   list.splice(meetup,1)  
+      // else
+      //   list.push(this.meetup_id)
        
     }
 
@@ -47,11 +62,14 @@ export default {
       // // if it is zero and bigger means we found meetup id in the array
       // console.log("userIsRegisterd value is " + value)
       // return value 
-      let value = this.$store.state.profilesInfo.filter( v => v["id"] === this.$store.getters.user.uid)
-      // alert(JSON.stringify(value))
+      let value = this.userProfileInfo
+      console.log("value of registred user is " + JSON.stringify(value))
       return value[0]["registeredMeetups"].includes(this.meetup_id)
       
     }, 
+    userProfileInfo(){
+      return  this.$store.state.profilesInfo.filter( v => v["id"] === this.$store.getters.user.uid)
+    },
     userInfo(){
       return this.$store.getters.user
     }, 

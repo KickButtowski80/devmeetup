@@ -44,7 +44,6 @@ let store = new Vuex.Store({
       return state.loadedMeetups.sort((meetupA, meetupB) => {
           return meetupA.date > meetupB.date
        })
-
     },
     featuredMeetups(state, getters) {
       return getters.loadedMeetups.slice(0, 5);
@@ -71,7 +70,6 @@ let store = new Vuex.Store({
   },
   mutations: {
     setLoadedMeetups(state, payload){             
-      // state.loadedMeetups = payload.slice()     
       state.loadedMeetups = [...payload]     
     },
     setLoadedProfilesInfo(state, payload){
@@ -98,6 +96,17 @@ let store = new Vuex.Store({
       if (payload.location) {
         meetup.location = payload.location 
       }
+    },
+    updateRegisteredMeetups(state, payload){  
+      console.log("update registrated meetup " + JSON.stringify(payload)) 
+      console.log("update registrated meetup " + JSON.stringify(state.profilesInfo))   
+      let currentUserProfile = state.profilesInfo.filter( p => p.id === state.user.uid)  
+      console.log("update registrated meetup " + JSON.stringify(currentUserProfile))     
+        if(payload.meetup !== -1)
+        currentUserProfile[0].registeredMeetups.splice(payload.meetup,1)  
+        else
+        currentUserProfile[0].registeredMeetups.push(payload.meetup_id)
+        
     },
     setUser(state, payload) {
       state.user = {...payload} 
@@ -215,21 +224,9 @@ let store = new Vuex.Store({
         });
     },
     updateMeetupData({ commit }, payload) {
-      //for now just, I pass title dateand description and  location after 
+      //for now just, I pass title date and description and  location after 
       commit("setLoading", true)
-      // const updatedObj = {} 
-      // if (payload.title) {
-      //   updatedObj.title = payload.title
-      // }
-      // if (payload.description) {
-      //   updatedObj.description = payload.description
-      // }
-
-      // if (payload.date) {
-      //   updatedObj.date = payload.date
-      // }
-  
-      db.collection("meetups")
+       db.collection("meetups")
         .doc(payload.id)
         .update({          
             title: payload.title,
@@ -238,13 +235,61 @@ let store = new Vuex.Store({
             location: payload.location          
         })
         .then(() => {
-           commit('setLoading', false)          
+          commit('setLoading', false)          
           commit ('updateMeetup', payload)
         })
         .catch(error => {
           console.log(error)
           commit('setLoading', false)
       })
+    },
+    //change registration status
+    changeRegistrationStatus({ commit}, payload) {
+      console.log("payload in change registration " + JSON.stringify(payload))
+      commit("setLoading", true)   
+      // so far here good commit ('updateRegisteredMeetups', payload)
+      // following code works 1. id of profileinfo needs to be find
+      // 2. if the meetup does exist , it has to be splice 
+           db.collection("profilesInfo")
+              .where("id","==", payload.profileInfoId)
+              .get()
+              .then(function(querySnapshot){
+                querySnapshot.forEach(function(doc) {
+                 if(payload.meetup === -1){
+                  db.collection("profilesInfo")
+                      .doc(doc.id)            
+                        .update({  
+                            registeredMeetups:firebase.firestore.FieldValue.arrayUnion(payload.meetup_id)   
+                        })
+                    
+                        .then(() => {
+                          commit('setLoading', false)          
+                          commit ('updateRegisteredMeetups', payload)
+                        })
+                        .catch(error => {          
+                          console.log(error)
+                          commit('setLoading', false)
+                      })
+                    }
+                  else{
+                   db.collection("profilesInfo")
+                    .doc(doc.id)            
+                      .update({  
+                          registeredMeetups:firebase.firestore.FieldValue.arrayRemove(payload.meetup_id)   
+                      })
+                  
+                      .then(() => {
+                        commit('setLoading', false)          
+                        commit ('updateRegisteredMeetups', payload)
+                      })
+                      .catch(error => {          
+                        console.log(error)
+                        commit('setLoading', false)
+                    })
+                  }
+                })
+              })
+
     },
     autoSignIn({commit}, payload){
      commit('setUser', payload)
@@ -316,13 +361,13 @@ let store = new Vuex.Store({
     },
 
     signUserIn(context, payload) {
-      context.commit("setLoading", true);
+      // context.commit("setLoading", true);
       context.commit("clearError");
       firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then(() => {
-          context.commit("setLoading", false);
+          // context.commit("setLoading", false);
           const currentUser = {
             name: firebase.auth().currentUser.displayName,
             id: firebase.auth().currentUser.id,
@@ -333,7 +378,7 @@ let store = new Vuex.Store({
           router.push("/");
         })
         .catch(error => {
-          context.commit("setLoading", false)
+          // context.commit("setLoading", false)
           context.commit("setError", error);
         });
     },

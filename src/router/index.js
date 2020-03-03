@@ -9,6 +9,7 @@ import Signup from '../views/User/Signup'
 import Meetup from '../views/Meetup/Meetup'
 import User from '../views/User/User'
 import AuthGuard from './auth-guard'
+// import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
@@ -33,14 +34,14 @@ const routes = [
     path:'/meetup/create',
     name:"CreateMeetup",
     component: CreateMeetup,
-    // beforeEnter:  AuthGuard
+    beforeEnter:  AuthGuard
   },
   {
     path: '/meetups/:id',
     props: true,
     name: "Meetup",
     component: Meetup,
-    // beforeEnter:  AuthGuard
+    //  beforeEnter:  AuthGuard
   },
   {
     path:'/meetups',
@@ -54,7 +55,13 @@ const routes = [
         path: 'profile',
         name: "profile",
         component: Profile,
-        beforeEnter:  AuthGuard
+        // beforeEnter:  (to, from, next) => {
+        //   if(!store.state.user) {
+        //       next('/signin')
+        //   }else{
+        //       next()
+        //   }
+        // }
       }
     ]
    

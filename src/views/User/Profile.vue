@@ -46,7 +46,7 @@
       </v-row>
     </v-img>
   </v-card>
-  <h1>profile info: {{this.profilesInfo}}</h1>
+  <!--<h1>profile info: {{this.profilesInfo}}</h1>-->
   </div>
 </template>
 <script>
@@ -66,7 +66,7 @@ export default {
             
            let currentUserProfile = this.$store.state.profilesInfo
                           .find( userProfile =>
-                                 userProfile.id === this.$store.getters.user.uid)
+                                 userProfile.id === this.$store.getters.user.uid )
            return currentUserProfile
           // } 
         }

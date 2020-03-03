@@ -58,12 +58,10 @@ export default {
         userInfo(){
             return this.$store.getters.user
         },
-        currentUser(){
-            
+        currentUser(){            
             if (!this.userIsAunthenticated)
                 return false
-            else
-         
+            else         
               return this.$store.getters.user.uid == this.meetup.creatorId
         },
         userIsAunthenticated(){
