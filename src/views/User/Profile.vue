@@ -2,8 +2,7 @@
 <div>
   <v-card
     class="mx-auto"
-    max-width="434"
-    
+    max-width="434"    
     tile
   >
    <v-img
