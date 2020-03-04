@@ -80,11 +80,11 @@ import moment from 'moment'
         editedLocation: this.meetup.location,
         titleRules: [
           v => !!v || 'Title is required',        
-          v => v.length >=5 || 'Title must not be less than 5 characters'
+          v => v.length <= 15  || 'Title must not be less than 10 characters'
         ],
         descriptionRules: [                   
           v => !!v || 'Description is required',        
-          v => v.length >=5 || 'Description must not be less than 5 characters'         
+          v => v.length <= 300 || 'Description must not be less than 300 characters'         
         ],
         dateRules: [
           v => !!v || "Date is required",
@@ -92,7 +92,7 @@ import moment from 'moment'
         ],
         locationRules: [
            v => !!v || "Location is required",
-           v => v.length >= 10 || "Location must not be less than 15 characters"
+           v => v.length <= 15 || "Location must not be less than 15 characters"
         ]
       }
     },
