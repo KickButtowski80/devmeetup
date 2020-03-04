@@ -44,7 +44,7 @@
                 </v-card>
               </template>
               <template>
-                <div>
+                <div v-if="registeredMeetups.length> 0 ">
                   <v-list-item-subtitle>Meetup Registred :</v-list-item-subtitle>
                   <v-card color="rgba(255, 0, 0, 0.5)">
                     <ol start="1" v-for="(meetup,i) in registeredMeetups" v-bind:key="i">
