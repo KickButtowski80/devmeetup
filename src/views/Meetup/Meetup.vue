@@ -4,10 +4,7 @@
     <v-row>
         <v-col> 
         <v-spacer></v-spacer>
-        <template v-if="currentUser">
-            <app-edit-meetup-details-dialog  id='x' v-bind:meetup="meetup">                 
-            </app-edit-meetup-details-dialog>
-        </template>
+
         </v-col>
     </v-row>
         <v-row warp>  
@@ -34,11 +31,24 @@
                      {{meetup.description}}
                     </v-card-text>
 
-                    <v-card-actions>        
-                    <v-btn>   
-                        <app-register-meetup-dialog :meetupId="id"></app-register-meetup-dialog>
-                    </v-btn>   
-                    </v-card-actions>
+                    <v-card-actions> 
+                    <template>
+                        <div>
+                            <template v-if="orginzerOrNot">  
+
+                                
+                                    <app-edit-meetup-details-dialog  id='x' v-bind:meetup="meetup">
+                               
+                                    </app-edit-meetup-details-dialog>
+                            </template>
+                            <template v-else>
+                                <v-btn >  
+                                    <app-register-meetup-dialog :meetupId="id"></app-register-meetup-dialog>
+                                </v-btn>                            
+                            </template>   
+                        </div>
+                    </template>  
+                </v-card-actions>
                 </v-card>              
            
             </v-col>
@@ -52,6 +62,10 @@ export default {
     // current meetup group
     props: ['id'],
     computed:{
+        orginzerOrNot(){
+            console.log("o r not " + this.$store.getters.loadedMeetup(this.id).creatorId+ "---" +this.$store.getters.user.uid)
+            return this.$store.getters.loadedMeetup(this.id).creatorId === this.$store.getters.user.uid
+        },
         meetup() {           
             return this.$store.getters.loadedMeetup(this.id)
         },

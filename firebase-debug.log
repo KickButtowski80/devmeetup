@@ -1,0 +1,25 @@
+[debug] [2020-03-03T02:18:39.268Z] ----------------------------------------------------------------------
+[debug] [2020-03-03T02:18:39.270Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2020-03-03T02:18:39.270Z] CLI Version:   7.14.0
+[debug] [2020-03-03T02:18:39.270Z] Platform:      linux
+[debug] [2020-03-03T02:18:39.270Z] Node Version:  v12.14.0
+[debug] [2020-03-03T02:18:39.271Z] Time:          Mon Mar 02 2020 18:18:39 GMT-0800 (Pacific Standard Time)
+[debug] [2020-03-03T02:18:39.271Z] ----------------------------------------------------------------------
+[debug] [2020-03-03T02:18:39.271Z] 
+[debug] [2020-03-03T02:18:39.278Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-03T02:18:39.279Z] > authorizing via signed-in user
+[debug] [2020-03-03T02:18:39.279Z] [iam] checking project devmeetup-it for permissions ["firebase.projects.get"]
+[debug] [2020-03-03T02:18:39.281Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/devmeetup-it:testIamPermissions  
+
+[debug] [2020-03-03T02:18:40.073Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-03T02:18:40.078Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/devmeetup-it  
+ 
+[debug] [2020-03-03T02:18:40.354Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/mnt/c/Users/IzakR/vuex/devmeetup'...
+[info] 
+[debug] [2020-03-03T02:18:40.376Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/devmeetup-it/webApps/-/config  
+ 
+[debug] [2020-03-03T02:18:40.856Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./dist
+[info] ✔  hosting: Local server: http://localhost:5000

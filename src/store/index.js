@@ -58,6 +58,12 @@ let store = new Vuex.Store({
     user(state) {
        return state.user;
     },
+    currentUserProfileInfo(state){
+      return  state.profilesInfo
+                         .find( userProfile =>
+                                 userProfile.id === store.getters.user.uid )
+
+    },
     profilesInfo(state){
       return state.profilesInfo
     },

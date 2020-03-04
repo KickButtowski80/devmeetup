@@ -45,7 +45,7 @@
       </v-row>
     </v-img>
   </v-card>
-  <!--<h1>profile info: {{this.profilesInfo}}</h1>-->
+  <h1>profile info: {{this.profilesInfo}}</h1>
   </div>
 </template>
 <script>

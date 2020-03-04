@@ -56,8 +56,7 @@ export default {
     userIsRegisterd() {
       
       // let value =  this.$store.state.profilesInfo.findIndex(userId=> {
-      //   console.log("user id " + JSON.stringify(userId) )
-      //   return userId.id === "ydAcLcJccDhcLD8REMkaytSlT2g2"
+      //     return userId.id === "ydAcLcJccDhcLD8REMkaytSlT2g2"
       // }) === 0
       // // if it is zero and bigger means we found meetup id in the array
       // console.log("userIsRegisterd value is " + value)

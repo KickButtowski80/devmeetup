@@ -2,10 +2,20 @@
   <v-row justify="end">
     <v-dialog   v-model="editDialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-      <v-btn  color="primary"
-              fab dark v-on="on">            
-              <v-icon>edit</v-icon>
-      </v-btn>
+        <v-chip
+          class="ma-2"
+          color="indigo"
+          text-color="white"
+          >
+          <v-avatar left>
+              <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          You are an orgenizer 
+        </v-chip>   
+        <v-btn  color="primary"
+                fab dark v-on="on">            
+                <v-icon>edit</v-icon>
+        </v-btn>
       </template>
       <v-card>
         <v-card-title>
