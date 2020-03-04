@@ -81,6 +81,7 @@ export default {
       let self = this
        firebase.auth().signOut().then(function() {
           self.$store.state.user = null
+          // window.localStorage.clear()
           // alert("successful sign out")
           // router.push('/signin')
         }).catch(function(error) {

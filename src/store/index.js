@@ -3,8 +3,25 @@ import Vuex from "vuex";
 import router from "../router";
 import firebase from "firebase";
 import db from "../main";
+import VuexPersist from 'vuex-persist';
 var util = require('util')
 Vue.use(Vuex);
+
+const vuexLocalStorage = new VuexPersist({
+  key: 'devmeetup-it', // The key to store the state on in the storage provider.
+  storage: window.localStorage, // or window.sessionStorage or localForage
+  // Function that passes the state and returns the state with only the objects you want to store.
+   
+  //  reducer: state => ({
+  //   keepLoadedMeetups : store.getters.loadedMeetups, 
+  //   keepUser: store.getters.user,
+  //   keepProfilesInfo: state.profilesInfo
+  //   // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
+  // })
+  // Function that passes a mutation and lets you decide if it should update the state in localStorage.
+  // filter: mutation => (true)
+})
+
 
 let store = new Vuex.Store({
   state: {
@@ -39,6 +56,7 @@ let store = new Vuex.Store({
     loading: false,
     error: null,
   },
+
   getters: {
     loadedMeetups(state) {
       return state.loadedMeetups.sort((meetupA, meetupB) => {
@@ -104,10 +122,10 @@ let store = new Vuex.Store({
       }
     },
     updateRegisteredMeetups(state, payload){  
-      console.log("update registrated meetup " + JSON.stringify(payload)) 
-      console.log("update registrated meetup " + JSON.stringify(state.profilesInfo))   
+      // console.log("update registrated meetup " + JSON.stringify(payload)) 
+      // console.log("update registrated meetup " + JSON.stringify(state.profilesInfo))   
       let currentUserProfile = state.profilesInfo.filter( p => p.id === state.user.uid)  
-      console.log("update registrated meetup " + JSON.stringify(currentUserProfile))     
+      // console.log("update registrated meetup " + JSON.stringify(currentUserProfile))     
         if(payload.meetup !== -1)
         currentUserProfile[0].registeredMeetups.splice(payload.meetup,1)  
         else
@@ -251,7 +269,7 @@ let store = new Vuex.Store({
     },
     //change registration status
     changeRegistrationStatus({ commit}, payload) {
-      console.log("payload in change registration " + JSON.stringify(payload))
+      // console.log("payload in change registration " + JSON.stringify(payload))
       commit("setLoading", true)   
       // so far here good commit ('updateRegisteredMeetups', payload)
       // following code works 1. id of profileinfo needs to be find
@@ -391,7 +409,9 @@ let store = new Vuex.Store({
     clearError({ commit }) {
       commit("clearError");
     }
-  }
+  },
+  plugins: [vuexLocalStorage.plugin]
+  
 });
 
 export default store;
