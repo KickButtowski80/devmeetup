@@ -20,11 +20,12 @@
         >
           <v-avatar
             class="profile"
-            color="grey"
+            
             size="164"
             tile
           >
-            <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+          <img :src="imgUrl" alt="">
+ 
           </v-avatar>
         </v-col>
         <v-col class="py-0">
@@ -56,18 +57,35 @@
 
             </v-list-item-content>
           </v-list-item>
+        
         </v-col>
       </v-row>
     </v-img>
+
   </v-card>
   <!--<h3>orginzer meetups:  {{this.meetups}}</h3>
   <h3>registered meetups: {{this.registeredMeetups}}</h3>
-  <h3>All the meetups: {{this.$store.getters.loadedMeetups}} </h3> -->
+  <h3>All the meetups: {{this.$store.getters.loadedMeetups}} </h3> 
+  <div style="word-wrap: break-word"> {{imgUrl}} </div>-->
+   
   </div>
 </template>
 <script>
 import {mapState} from 'vuex' 
 export default {
+    data(){
+      return {
+        imgUrl: this.$store.state.user.photoURL
+      }
+    },
+    created(){
+      // this.$store.subscribe((mutation, state) => {
+      //   if (mutation.type === "setUserAvatar") {
+      //     //debugger; // eslint-disable-line no-debugger
+      //     this.imgUrl = state.user.photoURL
+      //   }
+      // });
+    },
     computed: {
         ...mapState({
              owner_name: state => state.user.displayName,
@@ -87,7 +105,7 @@ export default {
                   meetupsInfo.push(allm[j])
                   }
           }
-          console.log("meetupsInfo " + JSON.stringify(meetupsInfo))
+           console.log("meetupsInfo " + JSON.stringify(this.$store.state.photoURL))
           return meetupsInfo
         },
         meetups(){

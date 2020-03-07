@@ -10,8 +10,7 @@
           <app-alert :text="error.message"></app-alert>
         </v-col>
       </v-row>
-        <v-row
-         
+        <v-row         
           justify="center"
         >
           <v-col

@@ -11,9 +11,13 @@ import 'firebase/firestore'
 import AlertComp from './components/Alert.vue'
 import EditMeetupDetailsDialog from './views/Meetup/Edit/EditMeetupDetailsDialog'
 import RegisterDialog from './views/Meetup/Registration/RegisterDialog'
+import Avataaar from 'vue-avataaar'
+
 Vue.component('app-alert', AlertComp)
 Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog)
 Vue.component("app-register-meetup-dialog", RegisterDialog )
+Vue.component('cool-avatar-img', Avataaar)
+
 Vue.config.productionTip = false
 
 

@@ -4,6 +4,8 @@ import router from "../router";
 import firebase from "firebase";
 import db from "../main";
 import VuexPersist from 'vuex-persist';
+import AvataaarMetadata from '../avataaar/avataaarMetadata'
+
 var util = require('util')
 Vue.use(Vuex);
 
@@ -55,6 +57,22 @@ let store = new Vuex.Store({
     profilesInfo: [],
     loading: false,
     error: null,
+    userAvatar: null
+    //  { avatarStyle: "" ,
+    // accessoriesType: "",
+    // clotheType: "",
+    // clotheColor: "",
+    // eyebrowType: "",
+    // eyeType: "",
+    // facialHairColor: "",
+    // facialHairType: "",
+    // graphicType: "",
+    // hairColor: "",
+    // mouthType: "",
+    // skinColor: "",
+    // topType: ""},
+   
+
   },
 
   getters: {
@@ -78,8 +96,8 @@ let store = new Vuex.Store({
     },
     currentUserProfileInfo(state){
       return  state.profilesInfo
-                         .find( userProfile =>
-                                 userProfile.id === store.getters.user.uid )
+                   .find( userProfile =>
+                           userProfile.id === store.getters.user.uid )
 
     },
     profilesInfo(state){
@@ -90,9 +108,37 @@ let store = new Vuex.Store({
     },
     error(state) {
       return state.error;
+    },
+    userAvatar(state){
+      return state.userAvatar
     }
   },
   mutations: {
+    setUserAvatar(state){
+      let values  = Object.values(AvataaarMetadata)
+      let tempArr = []
+      values.forEach( v => {
+                          console.log(v.properties[Math.floor(Math.random() * (v.properties.length - 1) ) + 1])
+                          tempArr.push(v.properties[Math.floor(Math.random() * (v.properties.length - 1) ) + 1])
+                        }
+                    )
+      state.userAvatar = { 
+      avatarStyle: tempArr[0].toString() ,
+      accessoriesType: tempArr[1].toString(),
+      clotheType: tempArr[2].toString(),
+      clotheColor: tempArr[3].toString(),
+      eyebrowType: tempArr[4].toString(),
+      eyeType: tempArr[5].toString(),
+      facialHairColor: tempArr[6].toString(),
+      facialHairType: tempArr[7].toString(),
+      graphicType: tempArr[8].toString(),
+      hairColor: tempArr[9].toString(),
+      mouthType: tempArr[10].toString(),
+      skinColor: tempArr[11].toString(),
+      topType: tempArr[12].toString()
+    }   
+    },
+
     setLoadedMeetups(state, payload){             
       state.loadedMeetups = [...payload]     
     },
@@ -122,21 +168,37 @@ let store = new Vuex.Store({
       }
     },
     updateRegisteredMeetups(state, payload){  
-      // console.log("update registrated meetup " + JSON.stringify(payload)) 
-      // console.log("update registrated meetup " + JSON.stringify(state.profilesInfo))   
       let currentUserProfile = state.profilesInfo.filter( p => p.id === state.user.uid)  
-      // console.log("update registrated meetup " + JSON.stringify(currentUserProfile))     
-        if(payload.meetup !== -1)
+      if(payload.meetup !== -1)
         currentUserProfile[0].registeredMeetups.splice(payload.meetup,1)  
-        else
+      else
         currentUserProfile[0].registeredMeetups.push(payload.meetup_id)
         
     },
     setUser(state, payload) {
-      state.user = {...payload} 
-      console.log('user === payload' + `${state.user === payload}`)
+      const {uid, refreshToken, photoURL, displayName, email} = payload;
+      console.log('user === payload' + JSON.stringify(payload))
+      console.log('payload detail info ' + payload.uid + " " + payload.refreshToken 
+                               + " " + payload.photoURL + " " + payload.displayName + " " + payload.email )
+      // payload = {
+      //   displayName:"test7",
+      //   email:"test7@test.com",
+      //   photoURL:"https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light",
+      //   refreshToken:"AEu4IL0tC9-fuEO-KZNwq953YDo2V7FBpjqB62FT6nXJ5d3r5u3Fzk1RYDzbjkO885rz0LrLyvIjHKHIDemiZsVPeio5XPXK5ntuRyFtLYcu-QOV4xnYYMn18mFxjo6P_TeqrnGIBuwpoto0ceTPxNfYFmedNyuxbNIU6MUVRp5WvnI7OWxVO5404RHIsnLrBsABoigDZgxs",
+      //   uid:"XAhAqlBbs5VZCredSDqdWqKze6C3",
+      // }
+       state.user = {...{uid, refreshToken, photoURL, displayName, email}} 
+      // debugger;// eslint-disable-line no-debugger
+      
+      // name: payload.name,
+      // id: data.user.uid,
+      // photoURL: data.user.photoURL
       //I do not understand that following chaining 
-      // state.user.name = payload.displayName
+      // state.user.name = "izak"
+      // state.user.email = payload.email
+      // state.user.photoURL = payload.photoURL
+      // state.user.refreshToken = payload.refreshToken
+      // state.user.id = payload.id
       
       // localStorage.setItem(state.user, JSON.stringify(payload))
     },
@@ -269,7 +331,6 @@ let store = new Vuex.Store({
     },
     //change registration status
     changeRegistrationStatus({ commit}, payload) {
-      // console.log("payload in change registration " + JSON.stringify(payload))
       commit("setLoading", true)   
       // so far here good commit ('updateRegisteredMeetups', payload)
       // following code works 1. id of profileinfo needs to be find
@@ -285,7 +346,6 @@ let store = new Vuex.Store({
                         .update({  
                             registeredMeetups:firebase.firestore.FieldValue.arrayUnion(payload.meetup_id)   
                         })
-                    
                         .then(() => {
                           commit('setLoading', false)          
                           commit ('updateRegisteredMeetups', payload)
@@ -301,7 +361,6 @@ let store = new Vuex.Store({
                       .update({  
                           registeredMeetups:firebase.firestore.FieldValue.arrayRemove(payload.meetup_id)   
                       })
-                  
                       .then(() => {
                         commit('setLoading', false)          
                         commit ('updateRegisteredMeetups', payload)
@@ -313,74 +372,87 @@ let store = new Vuex.Store({
                   }
                 })
               })
-
     },
     autoSignIn({commit}, payload){
-     commit('setUser', payload)
+      // debugger;  // eslint-disable-line no-debugger
+      const {uid, refreshToken, photoURL, displayName, email} = payload;
+      commit('setUser', {uid, refreshToken, photoURL, displayName, email})
     },
+
     signUserUp(context, payload) {
-      // const self = this
+      //name , email , and password are in payload
       context.commit("setLoading", true);
       context.commit("clearError");
-      
+ 
+      context.commit("setUserAvatar")
+      console.log("start")
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(data => {
-          data.user.updateProfile({
-            displayName: payload.name,
-            providerData:{
-              registeredMeetups: []
-            }           
-          });
-          return data
+        .then((user) => {
+          firebase.auth().currentUser.updateProfile({
+            displayName: payload.name ,
+            photoURL: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light'
+         })
+        //  .then(function() {
+        //    console.log("Update successful")
+        // }).catch(function(error) {
+        //   console.log('update profile error is ' + error)
+        // })
+        //  console.log("Data in user sing up " + JSON.stringify(data))
+        console.log("in create user promise sec 1 ")
+          return user
         })
         .then((data) => {
           context.commit("setLoading", false);
           
-          const newUser = {
-            name: payload.name,
-            id: data.user.uid,
-              // "_" +
-              // Math.random()
-              //   .toString(36)
-              //   .substr(2, 9),
-            registeredMeetups: []
-          };
-          console.log(
-            "newUser in action is " +
-              newUser.id +
-              "--" +
-              newUser.registeredMeetups.length
-          );
-       
+          // const newUser = {
+          //   name: payload.name,
+          //   id: data.user.uid,
+          //   photoURL: data.user.photoURL,
+          //   email: data.user.email
+          // };
+          // console.log(
+          //   "newUser in action is " +
+          //     newUser.id +
+          //     "--" +
+          //     newUser.registeredMeetups.length,
+          //     newUser.photoURL
+          // );
+          console.log("in create user promise sec 2") 
           db.collection("profilesInfo")
             .add({
               id: data.user.uid,
-              // "_" +
-              // Math.random()
-              //   .toString(36)
-              //   .substr(2, 9),
-            registeredMeetups: []
+              registeredMeetups: []
             })
             .then(function() {
-              context.commit("setProfilesInfo", newUser)
+              console.log("in proffile info promise sec")
+              context.commit("setProfilesInfo", 
+                 {    
+                    id: data.user.uid,
+                    registeredMeetups: []
+                  }
+                  )
               console.log("Document successfully written!");
           })
           .catch(function(error) {
               console.error("Error writing document: ", error);
           });
-          
-          context.commit("setUser", newUser);
-
+          context.commit("setUser", {
+            name: payload.name ,
+            id: data.user.uid,
+            photoURL: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light',
+            email: data.user.email
+          })
           router.push("/");
+          console.log("crate user is done here")
         })
         .catch(function(error) {
           // Handle Errors here.
           context.commit("setLoading", false);
           context.commit("setError", error);
         });
-
+       console.log("end")
         
     },
 
