@@ -56,7 +56,7 @@ let store = new Vuex.Store({
     profilesInfo: [],
     loading: false,
     error: null,
-    userAvatar: null
+    userAvatar: {}
     //  { avatarStyle: "" ,
     // accessoriesType: "",
     // clotheType: "",
@@ -127,7 +127,7 @@ let store = new Vuex.Store({
         );
       });
       state.userAvatar = {
-        avatarStyle: tempArr[0].toString(),
+        avatarStyle: tempArr[0].toString(), // it can be either Circle or Transparent
         accessoriesType: tempArr[1].toString(),
         clotheType: tempArr[2].toString(),
         clotheColor: tempArr[3].toString(),
@@ -376,7 +376,7 @@ let store = new Vuex.Store({
       context.commit("clearError");
 
       context.commit("setUserAvatar");
-      console.log("start");
+      
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
@@ -385,7 +385,13 @@ let store = new Vuex.Store({
             .updateProfile({
               displayName: payload.name,
               photoURL:
-                "https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light"
+                "https://avataaars.io/?avatarStyle=Transparent&topType=" + context.state.userAvatar.topType +
+                "&accessoriesType=" + context.state.userAvatar.accessoriesType + 
+                "&hairColor=" + context.state.userAvatar.hairColor + 
+                "&facialHairType=" + context.state.userAvatar.facialHairType +
+                "&facialHairColor=" + context.state.userAvatar.facialHairColor + 
+                "&clotheType=" + context.state.userAvatar.clotheType +
+                "&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light"
             })
             .then(function() {
               console.log("Update displayName and photoURL are successful");
@@ -400,8 +406,7 @@ let store = new Vuex.Store({
           context.commit("setLoading", false);
           const newUser = {
             name: payload.name,
-            photoURL:
-              "https://avataaars.io/?avatarStyle=Circle&topType=LongHairFro&accessoriesType=Kurt&hairColor=Black&facialHairType=Blank&clotheType=ShirtVNeck&clotheColor=Heather&eyeType=EyeRoll&eyebrowType=UnibrowNatural&mouthType=Eating&skinColor=Yellow",
+            photoURL: data.user.photoURL,
             id: data.user.uid,
             email: data.user.email
           };
