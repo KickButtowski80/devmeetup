@@ -43,11 +43,6 @@ export default {
          profileInfoId:  this.userProfileInfo[0].id
          
          })
-      // 
-      // if(meetup !== -1)
-      //   list.splice(meetup,1)  
-      // else
-      //   list.push(this.meetup_id)
        
     }
 
@@ -67,13 +62,13 @@ export default {
       
     }, 
     userProfileInfo(){
-      return  this.$store.state.profilesInfo.filter( v => v["id"] === this.$store.getters.user.uid)
+      return  this.$store.state.profilesInfo
+                          .filter( v => v["id"] === this.$store.getters.user.uid)
     },
     userInfo(){
       return this.$store.getters.user
     }, 
-    registerStatus(){
-     
+    registerStatus(){     
       return this.userIsRegisterd  ? 'unREGISTER' : 'REGISTER'
     }
   }

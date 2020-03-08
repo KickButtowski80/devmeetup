@@ -181,20 +181,18 @@ let store = new Vuex.Store({
       console.log("user === payload" + JSON.stringify(payload));
 
       // state.user = { ...{ uid, refreshToken, photoURL, displayName, email } };
-      state.user = JSON.parse(JSON.stringify(payload))
+      state.user = JSON.parse(JSON.stringify(payload));
       // debugger;// eslint-disable-line no-debugger
 
       // localStorage.setItem(state.user, JSON.stringify(payload))
     },
     setProfilesInfo(state, payload) {
       console.log("setProfilesInfo === payload" + JSON.stringify(payload));
-        // state.profilesInfo.push(payload);
-      state.profilesInfo = JSON.parse(JSON.stringify(payload))
-     // }
-     // else
-    //    console.log("payload is empty for profile info")
-
-   
+      // state.profilesInfo.push(payload);
+      state.profilesInfo = JSON.parse(JSON.stringify(payload));
+      // }
+      // else
+      //    console.log("payload is empty for profile info")
     },
     setLoading(state, payload) {
       state.loading = payload;
@@ -255,7 +253,7 @@ let store = new Vuex.Store({
           console.log("all the profilesInfo are loaded from firebase");
           profilesInfo.forEach(p => console.log(p));
           // context.commit("setLoadedProfilesInfo", profilesInfo);
-          context.commit("setProfilesInfo" , profilesInfo)
+          context.commit("setProfilesInfo", profilesInfo);
           context.commit("setLoading", false);
         })
         .catch(error => {
@@ -364,11 +362,12 @@ let store = new Vuex.Store({
           });
         });
     },
-    autoSignIn({ commit }, payload) {
+    autoSignIn({ commit, dispatch }, payload) {
       // debugger;  // eslint-disable-line no-debugger
-      // const { uid, refreshToken, photoURL, displayName, email } = payload;
-      // commit("setUser", { uid, refreshToken, photoURL, displayName, email });
-      commit("setUser", payload)
+
+      commit("setUser", payload);
+      dispatch("fetchMeetups");
+      dispatch("fetchprofilesInfo");
     },
 
     signUserUp(context, payload) {
