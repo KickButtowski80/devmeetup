@@ -53,7 +53,7 @@
                     v-model="confirmPassword"
                     prepend-icon="lock"
                     type="password"
-                    :rules =[rules.checkPasswords]
+                    :rules ="[rules.checkPasswords]"
                   />
                 </v-form>
               </v-card-text>

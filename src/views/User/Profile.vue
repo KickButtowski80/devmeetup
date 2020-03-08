@@ -34,9 +34,9 @@
             dark
           >
             <v-list-item-content>
-              <v-list-item-title class="title">Name: {{owner_name}}</v-list-item-title>
-              <v-list-item-subtitle>Email: {{user_info.email}}</v-list-item-subtitle>
-              <template v-if="meetups.length> 0 ">
+             <v-list-item-title class="title">Name: {{this.owner_name}}</v-list-item-title>
+             <v-list-item-subtitle>Email: {{user_info.email}}</v-list-item-subtitle>
+               <template v-if="meetups.length> 0 ">
                 <v-list-item-subtitle>Meetup organizer :</v-list-item-subtitle>
                   <v-card color="rgba(255, 0, 0, 0.5)">
                     <ol start="1" v-for="(meetup,i) in meetups" v-bind:key="i">
@@ -44,7 +44,7 @@
                     </ol>              
                 </v-card>
               </template>
-              <template>
+          <template>
                 <div v-if="registeredMeetups.length> 0 ">
                   <v-list-item-subtitle>Meetup Registred :</v-list-item-subtitle>
                   <v-card color="rgba(255, 0, 0, 0.5)">
@@ -64,9 +64,11 @@
 
   </v-card>
   <!--<h3>orginzer meetups:  {{this.meetups}}</h3>
-  <h3>registered meetups: {{this.registeredMeetups}}</h3>
-  <h3>All the meetups: {{this.$store.getters.loadedMeetups}} </h3> 
-  <div style="word-wrap: break-word"> {{imgUrl}} </div>-->
+  <h3>registered meetups: {{this.registeredMeetups}}</h3>-->
+  
+  <div style="word-wrap: break-word">image: {{this.$store.state.user.photoURL}} </div>
+
+  <h3> user : {{this.$store.state.user}} </h3> 
    
   </div>
 </template>
@@ -113,6 +115,7 @@ export default {
                        .filter( meetup => meetup.creatorId === this.$store.getters.user.uid )
         },
         profilesInfo(){
+           
           //  let currentUserProfile = this.$store.state.profilesInfo
           //                 .find( userProfile =>
           //                        userProfile.id === this.$store.getters.user.uid )

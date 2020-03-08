@@ -3,27 +3,26 @@ import Vuex from "vuex";
 import router from "../router";
 import firebase from "firebase";
 import db from "../main";
-import VuexPersist from 'vuex-persist';
-import AvataaarMetadata from '../avataaar/avataaarMetadata'
+// import VuexPersist from "vuex-persist";
+import AvataaarMetadata from "../avataaar/avataaarMetadata";
 
-var util = require('util')
+var util = require("util");
 Vue.use(Vuex);
 
-const vuexLocalStorage = new VuexPersist({
-  key: 'devmeetup-it', // The key to store the state on in the storage provider.
-  storage: window.localStorage, // or window.sessionStorage or localForage
-  // Function that passes the state and returns the state with only the objects you want to store.
-   
-  //  reducer: state => ({
-  //   keepLoadedMeetups : store.getters.loadedMeetups, 
-  //   keepUser: store.getters.user,
-  //   keepProfilesInfo: state.profilesInfo
-  //   // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
-  // })
-  // Function that passes a mutation and lets you decide if it should update the state in localStorage.
-  // filter: mutation => (true)
-})
+// const vuexLocalStorage = new VuexPersist({
+//   key: "devmeetup-it", // The key to store the state on in the storage provider.
+//   storage: window.localStorage // or window.sessionStorage or localForage
+//   // Function that passes the state and returns the state with only the objects you want to store.
 
+//   //  reducer: state => ({
+//   //   keepLoadedMeetups : store.getters.loadedMeetups,
+//   //   keepUser: store.getters.user,
+//   //   keepProfilesInfo: state.profilesInfo
+//   //   // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
+//   // })
+//   // Function that passes a mutation and lets you decide if it should update the state in localStorage.
+//   // filter: mutation => (true)
+// });
 
 let store = new Vuex.Store({
   state: {
@@ -71,15 +70,13 @@ let store = new Vuex.Store({
     // mouthType: "",
     // skinColor: "",
     // topType: ""},
-   
-
   },
 
   getters: {
     loadedMeetups(state) {
       return state.loadedMeetups.sort((meetupA, meetupB) => {
-          return meetupA.date > meetupB.date
-       })
+        return meetupA.date > meetupB.date;
+      });
     },
     featuredMeetups(state, getters) {
       return getters.loadedMeetups.slice(0, 5);
@@ -92,16 +89,16 @@ let store = new Vuex.Store({
       };
     },
     user(state) {
-       return state.user;
+      return state.user;
     },
-    currentUserProfileInfo(state){
-      return  state.profilesInfo
-                   .find( userProfile =>
-                           userProfile.id === store.getters.user.uid )
-
+    currentUserProfileInfo(state) {
+      // debugger; // eslint-disable-line no-debugger
+      return state.profilesInfo.find(
+        userProfile => userProfile.id === store.getters.user.uid
+      );
     },
-    profilesInfo(state){
-      return state.profilesInfo
+    profilesInfo(state) {
+      return state.profilesInfo;
     },
     loading(state) {
       return state.loading;
@@ -109,101 +106,95 @@ let store = new Vuex.Store({
     error(state) {
       return state.error;
     },
-    userAvatar(state){
-      return state.userAvatar
+    userAvatar(state) {
+      return state.userAvatar;
     }
   },
   mutations: {
-    setUserAvatar(state){
-      let values  = Object.values(AvataaarMetadata)
-      let tempArr = []
-      values.forEach( v => {
-                          console.log(v.properties[Math.floor(Math.random() * (v.properties.length - 1) ) + 1])
-                          tempArr.push(v.properties[Math.floor(Math.random() * (v.properties.length - 1) ) + 1])
-                        }
-                    )
-      state.userAvatar = { 
-      avatarStyle: tempArr[0].toString() ,
-      accessoriesType: tempArr[1].toString(),
-      clotheType: tempArr[2].toString(),
-      clotheColor: tempArr[3].toString(),
-      eyebrowType: tempArr[4].toString(),
-      eyeType: tempArr[5].toString(),
-      facialHairColor: tempArr[6].toString(),
-      facialHairType: tempArr[7].toString(),
-      graphicType: tempArr[8].toString(),
-      hairColor: tempArr[9].toString(),
-      mouthType: tempArr[10].toString(),
-      skinColor: tempArr[11].toString(),
-      topType: tempArr[12].toString()
-    }   
+    setUserAvatar(state) {
+      let values = Object.values(AvataaarMetadata);
+      let tempArr = [];
+      values.forEach(v => {
+        console.log(
+          v.properties[
+            Math.floor(Math.random() * (v.properties.length - 1)) + 1
+          ]
+        );
+        tempArr.push(
+          v.properties[
+            Math.floor(Math.random() * (v.properties.length - 1)) + 1
+          ]
+        );
+      });
+      state.userAvatar = {
+        avatarStyle: tempArr[0].toString(),
+        accessoriesType: tempArr[1].toString(),
+        clotheType: tempArr[2].toString(),
+        clotheColor: tempArr[3].toString(),
+        eyebrowType: tempArr[4].toString(),
+        eyeType: tempArr[5].toString(),
+        facialHairColor: tempArr[6].toString(),
+        facialHairType: tempArr[7].toString(),
+        graphicType: tempArr[8].toString(),
+        hairColor: tempArr[9].toString(),
+        mouthType: tempArr[10].toString(),
+        skinColor: tempArr[11].toString(),
+        topType: tempArr[12].toString()
+      };
     },
 
-    setLoadedMeetups(state, payload){             
-      state.loadedMeetups = [...payload]     
-    },
-    setLoadedProfilesInfo(state, payload){
-      state.profilesInfo = [...payload]   
+    setLoadedMeetups(state, payload) {
+      state.loadedMeetups = [...payload];
     },
     createMeetup(state, newMeetup) {
-       state.loadedMeetups.push(newMeetup)
+      state.loadedMeetups.push(newMeetup);
     },
     updateMeetup(state, payload) {
       const meetup = state.loadedMeetups.find(meetup => {
-        return meetup.id == payload.id
-      })
+        return meetup.id == payload.id;
+      });
       if (payload.title) {
-        meetup.title = payload.title
+        meetup.title = payload.title;
       }
       if (payload.description) {
-        meetup.description = payload.description
+        meetup.description = payload.description;
       }
 
       if (payload.date) {
-        meetup.date = payload.date
+        meetup.date = payload.date;
       }
 
       if (payload.location) {
-        meetup.location = payload.location 
+        meetup.location = payload.location;
       }
     },
-    updateRegisteredMeetups(state, payload){  
-      let currentUserProfile = state.profilesInfo.filter( p => p.id === state.user.uid)  
-      if(payload.meetup !== -1)
-        currentUserProfile[0].registeredMeetups.splice(payload.meetup,1)  
-      else
-        currentUserProfile[0].registeredMeetups.push(payload.meetup_id)
-        
+    updateRegisteredMeetups(state, payload) {
+      let currentUserProfile = state.profilesInfo.filter(
+        p => p.id === state.user.uid
+      );
+      if (payload.meetup !== -1)
+        currentUserProfile[0].registeredMeetups.splice(payload.meetup, 1);
+      else currentUserProfile[0].registeredMeetups.push(payload.meetup_id);
     },
     setUser(state, payload) {
-      const {uid, refreshToken, photoURL, displayName, email} = payload;
-      console.log('user === payload' + JSON.stringify(payload))
-      console.log('payload detail info ' + payload.uid + " " + payload.refreshToken 
-                               + " " + payload.photoURL + " " + payload.displayName + " " + payload.email )
-      // payload = {
-      //   displayName:"test7",
-      //   email:"test7@test.com",
-      //   photoURL:"https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light",
-      //   refreshToken:"AEu4IL0tC9-fuEO-KZNwq953YDo2V7FBpjqB62FT6nXJ5d3r5u3Fzk1RYDzbjkO885rz0LrLyvIjHKHIDemiZsVPeio5XPXK5ntuRyFtLYcu-QOV4xnYYMn18mFxjo6P_TeqrnGIBuwpoto0ceTPxNfYFmedNyuxbNIU6MUVRp5WvnI7OWxVO5404RHIsnLrBsABoigDZgxs",
-      //   uid:"XAhAqlBbs5VZCredSDqdWqKze6C3",
-      // }
-       state.user = {...{uid, refreshToken, photoURL, displayName, email}} 
+      // const { uid, refreshToken, photoURL, displayName, email } = payload;
+      console.log("user === payload" + JSON.stringify(payload));
+
+      // state.user = { ...{ uid, refreshToken, photoURL, displayName, email } };
+      state.user = JSON.parse(JSON.stringify(payload))
       // debugger;// eslint-disable-line no-debugger
-      
-      // name: payload.name,
-      // id: data.user.uid,
-      // photoURL: data.user.photoURL
-      //I do not understand that following chaining 
-      // state.user.name = "izak"
-      // state.user.email = payload.email
-      // state.user.photoURL = payload.photoURL
-      // state.user.refreshToken = payload.refreshToken
-      // state.user.id = payload.id
-      
+
       // localStorage.setItem(state.user, JSON.stringify(payload))
     },
-    setProfilesInfo(state, payload){
-       state.profilesInfo.push(payload)
+    setProfilesInfo(state, payload) {
+      console.log("setProfilesInfo === payload" + JSON.stringify(payload));
+        // state.profilesInfo.push(payload);
+      state.profilesInfo = JSON.parse(JSON.stringify(payload))
+     // }
+     // else
+    //    console.log("payload is empty for profile info")
+
+   
     },
     setLoading(state, payload) {
       state.loading = payload;
@@ -216,63 +207,63 @@ let store = new Vuex.Store({
     }
   },
   actions: {
-    fetchMeetups(context){
-      context.commit('setLoading', true)
+    fetchMeetups(context) {
+      context.commit("setLoading", true);
       db.collection("meetups")
-      .get()
-      .then(function(querySnapshot) {
-        const meetups = []
-        querySnapshot.forEach(function(doc) {
-          const numberOfKeys = Object.keys(doc.data()).length; 
-          //check if document is empty or not 
-          if(numberOfKeys !== 0){
-            let meetup = {
-              id: doc.id,
-              ...doc.data()
+        .get()
+        .then(function(querySnapshot) {
+          const meetups = [];
+          querySnapshot.forEach(function(doc) {
+            const numberOfKeys = Object.keys(doc.data()).length;
+            //check if document is empty or not
+            if (numberOfKeys !== 0) {
+              let meetup = {
+                id: doc.id,
+                ...doc.data()
+              };
+              meetups.push(meetup);
             }
-            meetups.push(meetup)
-          }
+          });
+          console.log("all the meetups are loaded from firebase");
+          meetups.forEach(m => console.log(m));
+          context.commit("setLoadedMeetups", meetups);
+          context.commit("setLoading", false);
+        })
+        .catch(error => {
+          console.log(error);
+          context.commit("setLoading", true);
         });
-        console.log("all the meetups are loaded from firebase") 
-        meetups.forEach( m => console.log( m ))     
-        context.commit('setLoadedMeetups', meetups)
-        context.commit('setLoading', false)  
-      })
-      .catch(error => {
-        console.log(error);
-        // context.commit('setLoading', true)
-      });
     },
-    fetchprofilesInfo(context){
-      context.commit('setLoading', true)
+    fetchprofilesInfo(context) {
+      context.commit("setLoading", true);
       db.collection("profilesInfo")
-      .get()
-      .then(function(querySnapshot) {
-        const profilesInfo = []
-        querySnapshot.forEach(function(doc) {
-          const numberOfKeys = Object.keys(doc.data()).length;
-          
-          //check if document is empty or not 
-          if(numberOfKeys !== 0){
-            // let profileInfo = {
-            //   id: doc.id,
-            //   ...doc.data()
-            // }
-            profilesInfo.push({...doc.data()})
-          }
+        .get()
+        .then(function(querySnapshot) {
+          const profilesInfo = [];
+          querySnapshot.forEach(function(doc) {
+            const numberOfKeys = Object.keys(doc.data()).length;
+
+            //check if document is empty or not
+            if (numberOfKeys !== 0) {
+              // let profileInfo = {
+              //   id: doc.id,
+              //   ...doc.data()
+              // }
+              profilesInfo.push({ ...doc.data() });
+            }
+          });
+          console.log("all the profilesInfo are loaded from firebase");
+          profilesInfo.forEach(p => console.log(p));
+          // context.commit("setLoadedProfilesInfo", profilesInfo);
+          context.commit("setProfilesInfo" , profilesInfo)
+          context.commit("setLoading", false);
+        })
+        .catch(error => {
+          console.log(error);
+          // context.commit('setLoading', true)
         });
-        console.log("all the profilesInfo are loaded from firebase") 
-        profilesInfo.forEach( p => console.log( p ))     
-        context.commit('setLoadedProfilesInfo', profilesInfo)
-        context.commit('setLoading', false)  
-      })
-      .catch(error => {
-        console.log(error);
-        // context.commit('setLoading', true)
-      });
     },
     createMeetup(context, payload) {
-     
       let newMeetup = {
         src: payload.src,
         title: payload.title,
@@ -285,12 +276,11 @@ let store = new Vuex.Store({
         location: payload.location,
         description: payload.description
       };
-     
+
       db.collection("meetups")
         .add({
           ...newMeetup,
-          creatorId: context.state.user.uid,
-         
+          creatorId: context.state.user.uid
         })
         .then(function(docRef) {
           // const key = docRef.id
@@ -300,160 +290,144 @@ let store = new Vuex.Store({
             ...newMeetup,
             creatorId: context.state.user.uid,
             id: docRef.id
-            
           });
-          console.log("newMeetup info is " + util.inspect(newMeetup))
-
+          console.log("newMeetup info is " + util.inspect(newMeetup));
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
         });
     },
     updateMeetupData({ commit }, payload) {
-      //for now just, I pass title date and description and  location after 
-      commit("setLoading", true)
-       db.collection("meetups")
+      //for now just, I pass title date and description and  location after
+      commit("setLoading", true);
+      db.collection("meetups")
         .doc(payload.id)
-        .update({          
-            title: payload.title,
-            description : payload.description,
-            date: payload.date,
-            location: payload.location          
+        .update({
+          title: payload.title,
+          description: payload.description,
+          date: payload.date,
+          location: payload.location
         })
         .then(() => {
-          commit('setLoading', false)          
-          commit ('updateMeetup', payload)
+          commit("setLoading", false);
+          commit("updateMeetup", payload);
         })
         .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-      })
+          console.log(error);
+          commit("setLoading", false);
+        });
     },
     //change registration status
-    changeRegistrationStatus({ commit}, payload) {
-      commit("setLoading", true)   
+    changeRegistrationStatus({ commit }, payload) {
+      commit("setLoading", true);
       // so far here good commit ('updateRegisteredMeetups', payload)
       // following code works 1. id of profileinfo needs to be find
-      // 2. if the meetup does exist , it has to be splice 
-           db.collection("profilesInfo")
-              .where("id","==", payload.profileInfoId)
-              .get()
-              .then(function(querySnapshot){
-                querySnapshot.forEach(function(doc) {
-                 if(payload.meetup === -1){
-                  db.collection("profilesInfo")
-                      .doc(doc.id)            
-                        .update({  
-                            registeredMeetups:firebase.firestore.FieldValue.arrayUnion(payload.meetup_id)   
-                        })
-                        .then(() => {
-                          commit('setLoading', false)          
-                          commit ('updateRegisteredMeetups', payload)
-                        })
-                        .catch(error => {          
-                          console.log(error)
-                          commit('setLoading', false)
-                      })
-                    }
-                  else{
-                   db.collection("profilesInfo")
-                    .doc(doc.id)            
-                      .update({  
-                          registeredMeetups:firebase.firestore.FieldValue.arrayRemove(payload.meetup_id)   
-                      })
-                      .then(() => {
-                        commit('setLoading', false)          
-                        commit ('updateRegisteredMeetups', payload)
-                      })
-                      .catch(error => {          
-                        console.log(error)
-                        commit('setLoading', false)
-                    })
-                  }
+      // 2. if the meetup does exist , it has to be splice
+      db.collection("profilesInfo")
+        .where("id", "==", payload.profileInfoId)
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            if (payload.meetup === -1) {
+              db.collection("profilesInfo")
+                .doc(doc.id)
+                .update({
+                  registeredMeetups: firebase.firestore.FieldValue.arrayUnion(
+                    payload.meetup_id
+                  )
                 })
-              })
+                .then(() => {
+                  commit("setLoading", false);
+                  commit("updateRegisteredMeetups", payload);
+                })
+                .catch(error => {
+                  console.log(error);
+                  commit("setLoading", false);
+                });
+            } else {
+              db.collection("profilesInfo")
+                .doc(doc.id)
+                .update({
+                  registeredMeetups: firebase.firestore.FieldValue.arrayRemove(
+                    payload.meetup_id
+                  )
+                })
+                .then(() => {
+                  commit("setLoading", false);
+                  commit("updateRegisteredMeetups", payload);
+                })
+                .catch(error => {
+                  console.log(error);
+                  commit("setLoading", false);
+                });
+            }
+          });
+        });
     },
-    autoSignIn({commit}, payload){
+    autoSignIn({ commit }, payload) {
       // debugger;  // eslint-disable-line no-debugger
-      const {uid, refreshToken, photoURL, displayName, email} = payload;
-      commit('setUser', {uid, refreshToken, photoURL, displayName, email})
+      // const { uid, refreshToken, photoURL, displayName, email } = payload;
+      // commit("setUser", { uid, refreshToken, photoURL, displayName, email });
+      commit("setUser", payload)
     },
 
     signUserUp(context, payload) {
       //name , email , and password are in payload
       context.commit("setLoading", true);
       context.commit("clearError");
- 
-      context.commit("setUserAvatar")
-      console.log("start")
+
+      context.commit("setUserAvatar");
+      console.log("start");
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then((user) => {
-          firebase.auth().currentUser.updateProfile({
-            displayName: payload.name ,
-            photoURL: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light'
-         })
-        //  .then(function() {
-        //    console.log("Update successful")
-        // }).catch(function(error) {
-        //   console.log('update profile error is ' + error)
-        // })
-        //  console.log("Data in user sing up " + JSON.stringify(data))
-        console.log("in create user promise sec 1 ")
-          return user
+        .then(data => {
+          data.user
+            .updateProfile({
+              displayName: payload.name,
+              photoURL:
+                "https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light"
+            })
+            .then(function() {
+              console.log("Update displayName and photoURL are successful");
+            })
+            .catch(function(error) {
+              console.log("Update displayName and photoURL error is " + error);
+            });
+
+          return data;
         })
-        .then((data) => {
+        .then(data => {
           context.commit("setLoading", false);
-          
-          // const newUser = {
-          //   name: payload.name,
-          //   id: data.user.uid,
-          //   photoURL: data.user.photoURL,
-          //   email: data.user.email
-          // };
-          // console.log(
-          //   "newUser in action is " +
-          //     newUser.id +
-          //     "--" +
-          //     newUser.registeredMeetups.length,
-          //     newUser.photoURL
-          // );
-          console.log("in create user promise sec 2") 
+          const newUser = {
+            name: payload.name,
+            photoURL:
+              "https://avataaars.io/?avatarStyle=Circle&topType=LongHairFro&accessoriesType=Kurt&hairColor=Black&facialHairType=Blank&clotheType=ShirtVNeck&clotheColor=Heather&eyeType=EyeRoll&eyebrowType=UnibrowNatural&mouthType=Eating&skinColor=Yellow",
+            id: data.user.uid,
+            email: data.user.email
+          };
           db.collection("profilesInfo")
             .add({
               id: data.user.uid,
               registeredMeetups: []
             })
             .then(function() {
-              console.log("in proffile info promise sec")
-              context.commit("setProfilesInfo", 
-                 {    
-                    id: data.user.uid,
-                    registeredMeetups: []
-                  }
-                  )
-              console.log("Document successfully written!");
-          })
-          .catch(function(error) {
-              console.error("Error writing document: ", error);
-          });
-          context.commit("setUser", {
-            name: payload.name ,
-            id: data.user.uid,
-            photoURL: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light',
-            email: data.user.email
-          })
+              context.commit("setProfilesInfo", {
+                id: data.user.uid,
+                registeredMeetups: []
+              });
+              console.log("profilesInfo successfully written!");
+            })
+            .catch(function(error) {
+              console.error("Error writing profilesInfo: ", error);
+            });
+          context.commit("setUser", newUser);
           router.push("/");
-          console.log("crate user is done here")
         })
         .catch(function(error) {
-          // Handle Errors here.
           context.commit("setLoading", false);
           context.commit("setError", error);
         });
-       console.log("end")
-        
     },
 
     signUserIn(context, payload) {
@@ -467,9 +441,9 @@ let store = new Vuex.Store({
           const currentUser = {
             name: firebase.auth().currentUser.displayName,
             id: firebase.auth().currentUser.id,
-            registeredMeetups: []
+            photoURL: firebase.auth().currentUser.photoURL
           };
-         console.log("@@@@@@>" + firebase.auth().currentUser.name)
+          console.log("@@@@@@>" + firebase.auth().currentUser.displayName);
           context.commit("setUser", currentUser);
           router.push("/");
         })
@@ -481,9 +455,8 @@ let store = new Vuex.Store({
     clearError({ commit }) {
       commit("clearError");
     }
-  },
-  plugins: [vuexLocalStorage.plugin]
-  
+  }
+  // plugins: [vuexLocalStorage.plugin]
 });
 
 export default store;
