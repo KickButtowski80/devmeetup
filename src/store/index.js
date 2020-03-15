@@ -93,6 +93,7 @@ let store = new Vuex.Store({
     },
     currentUserProfileInfo(state) {
       // debugger; // eslint-disable-line no-debugger
+      if (!state.profilesInfo) return "";
       return state.profilesInfo.find(
         userProfile => userProfile.id === store.getters.user.uid
       );
@@ -376,7 +377,7 @@ let store = new Vuex.Store({
       context.commit("clearError");
 
       context.commit("setUserAvatar");
-      
+
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
@@ -385,12 +386,18 @@ let store = new Vuex.Store({
             .updateProfile({
               displayName: payload.name,
               photoURL:
-                "https://avataaars.io/?avatarStyle=Transparent&topType=" + context.state.userAvatar.topType +
-                "&accessoriesType=" + context.state.userAvatar.accessoriesType + 
-                "&hairColor=" + context.state.userAvatar.hairColor + 
-                "&facialHairType=" + context.state.userAvatar.facialHairType +
-                "&facialHairColor=" + context.state.userAvatar.facialHairColor + 
-                "&clotheType=" + context.state.userAvatar.clotheType +
+                "https://avataaars.io/?avatarStyle=Transparent&topType=" +
+                context.state.userAvatar.topType +
+                "&accessoriesType=" +
+                context.state.userAvatar.accessoriesType +
+                "&hairColor=" +
+                context.state.userAvatar.hairColor +
+                "&facialHairType=" +
+                context.state.userAvatar.facialHairType +
+                "&facialHairColor=" +
+                context.state.userAvatar.facialHairColor +
+                "&clotheType=" +
+                context.state.userAvatar.clotheType +
                 "&clotheColor=Gray01&eyeType=Squint&eyebrowType=AngryNatural&mouthType=Sad&skinColor=Light"
             })
             .then(function() {
